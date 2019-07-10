@@ -1,18 +1,20 @@
 import React from "react";
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
-import { colors, device, fonts } from "../constants";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { colors, device } from "../constants";
+
+import SettingIcon from "../assets/icons/Setting";
+import Radar from "../assets/icons/Radar";
 
 const Nav = ({ navigation, toggle }) => (
   <View style={styles.container}>
-    <View style={styles.containerInput}>
-      <View style={styles.containerSquare}>
-        <TouchableOpacity style={styles.mapbtn} onPress={toggle}>
-          <Text style={styles.mapText}>Press Me</Text>
-        </TouchableOpacity>
-      </View>
-      <Button title="where" onPress={() => navigation.navigate("Setting")}>
-        Where to?
-      </Button>
+    <View style={styles.containerBanner}>
+      <TouchableOpacity style={styles.mapbtn} onPress={toggle}>
+        <Radar size={35} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.middle} onPress={toggle} />
+      <TouchableOpacity onPress={() => navigation.navigate("Setting")}>
+        <SettingIcon size={35} />
+      </TouchableOpacity>
     </View>
   </View>
 );
@@ -25,53 +27,25 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 2, width: 0 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
-    bottom: device.iPhoneX ? 10 : 20,
+    bottom: device.iPhoneX ? 10 : 10,
     width: device.width - 40
   },
   containerBanner: {
-    backgroundColor: colors.green,
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 8
-  },
-  bannerText: {
-    color: colors.white,
-    fontSize: 12
-  },
-  bannerMuted: {
-    color: colors.mint,
-    fontFamily: fonts.uberMedium,
-    fontSize: 12
-  },
-  containerInput: {
-    alignItems: "center",
     backgroundColor: colors.white,
     flexDirection: "row",
-    height: 48
-  },
-  containerSquare: {
+    justifyContent: "space-around",
     alignItems: "center",
-    flex: 2
+    height: 50,
+    borderRadius: 20
   },
-  square: {
-    backgroundColor: colors.black,
-    height: 8,
-    width: 8
-  },
-  text: {
-    color: colors.greyAbbey,
-    flex: 8,
-    fontFamily: fonts.uberMedium,
-    fontSize: 20
-  },
-  containerIcon: {
-    alignItems: "center",
-    borderLeftColor: colors.greyMercury,
-    borderLeftWidth: 1,
-    flex: 2
+  middle: {
+    borderTopWidth: 5,
+    borderTopColor: colors.black,
+    borderStyle: "solid",
+    alignSelf: "flex-start",
+    width: "30%",
+    height: "100%",
+    marginTop: 10
   }
 });
 

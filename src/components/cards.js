@@ -11,7 +11,7 @@ import {
 
 const { width, height } = Dimensions.get("window");
 
-const CARD_HEIGHT = height / 2.5;
+const CARD_HEIGHT = height / 3.5;
 const CARD_WIDTH = width * 0.7;
 
 export default class Cards extends React.Component {
@@ -74,6 +74,7 @@ export default class Cards extends React.Component {
             </View>
             <Text style={styles.cardtitle}>{marker.name}</Text>
             <View style={styles.textContent}>
+              <Text>Rating</Text>
               <TouchableOpacity
                 style={styles.mapbtn}
                 onPress={() => navigation.navigate("Setting")}
@@ -91,7 +92,7 @@ export default class Cards extends React.Component {
 const styles = StyleSheet.create({
   scrollView: {
     position: "absolute",
-    bottom: 50,
+    bottom: 80,
     left: 0,
     right: 0,
     paddingVertical: 0
@@ -119,15 +120,16 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10
   },
   cardtitle: {
-    marginLeft: 10,
-    padding: 10,
-    fontSize: 20
+    fontSize: 16,
+    paddingLeft: 20
   },
   textContent: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center"
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingLeft: 20,
+    paddingRight: 20
   },
   distance: {
     flex: 1,
