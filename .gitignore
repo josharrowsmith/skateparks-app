@@ -8,5 +8,6 @@ npm-debug.*
 *.env
 *.mobileprovision
 *.orig.*
+package-lock.json
 web-build/
 web-report/
