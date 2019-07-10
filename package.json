@@ -1,0 +1,41 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "eslint ./ --fix",
+    "eject": "expo eject"
+  },
+  "dependencies": {
+    "babel-eslint": "^10.0.2",
+    "expo": "^33.0.0",
+    "expo-asset": "^5.0.1",
+    "expo-font": "^5.0.1",
+    "expo-location": "^5.0.1",
+    "expo-permissions": "^5.0.1",
+    "firebase": "^5.9.0",
+    "geofirestore": "^3.2.2",
+    "react": "16.8.3",
+    "react-dom": "^16.8.6",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-dotenv": "^0.2.0",
+    "react-native-maps": "^0.24.2",
+    "react-native-web": "^0.11.4",
+    "react-navigation": "^3.11.0",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.8"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.1.1",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "prettier": "^1.17.1"
+  },
+  "private": true
+}
