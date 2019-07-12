@@ -25,7 +25,7 @@ export default class MapScreen extends React.Component {
       location: null,
       tracking: false,
       parks: [],
-      showCards: false
+      showCards: false,
     };
   }
 
@@ -98,8 +98,9 @@ export default class MapScreen extends React.Component {
     });
   };
 
+
   render() {
-    const { showMap, parks, location, showCards } = this.state;
+    const { parks, location, showCards } = this.state;
     const { navigation } = this.props;
 
     return (
@@ -112,7 +113,10 @@ export default class MapScreen extends React.Component {
               showCards={showCards}
               navigation={navigation}
             />
-            <Nav navigation={navigation} toggle={this.toggleAction} />
+            <Nav
+              navigation={navigation}
+              toggle={this.toggleAction}
+            />
           </>
         )}
         {!location && <Loading />}

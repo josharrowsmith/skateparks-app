@@ -8,7 +8,12 @@ import Radar from "../assets/icons/Radar";
 const Nav = ({ navigation, toggle }) => (
   <View style={styles.container}>
     <View style={styles.containerBanner}>
-      <TouchableOpacity style={styles.mapbtn} onPress={toggle}>
+      <TouchableOpacity
+        style={styles.mapbtn}
+        onPress={() => {
+          navigation.navigate("Modal");
+        }}
+      >
         <Radar size={35} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.middle} onPress={toggle} />
