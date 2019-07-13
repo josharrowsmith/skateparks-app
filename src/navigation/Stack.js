@@ -33,12 +33,7 @@ const StackNavigator = createStackNavigator(
     initialRouteName: "Welcome",
     mode: "modal",
     transparentCard: true,
-    cardStyle: { opacity: 1 },
-    transitionConfig: () => ({
-      transitionSpec: {
-        duration: 0
-      }
-    })
+    cardStyle: { opacity: 1 }
   }
 );
 

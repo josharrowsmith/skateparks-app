@@ -1,18 +1,20 @@
 import React from "react";
-import { Text, Button, TouchableOpacity } from "react-native";
+import { Text, Slider, TouchableOpacity } from "react-native";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { setRadius } from "../store/actions/radius";
 
-export default class ModalScreen extends React.Component {
+const MAX_RADIUS = 20;
+const MIN_RADIUS = 5;
+
+class ModalScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
-  componentDidMount() {
-    // has no idea you could do this
-    // BackHandler.addEventListener("hardwareBackPress", function() {
-    //   return true;
-    // });
-  }
+  updateRadius = val => {
+    this.props.setRadius(val);
+  };
 
   render() {
     const { navigation } = this.props;
@@ -26,9 +28,36 @@ export default class ModalScreen extends React.Component {
           backgroundColor: "#00000080"
         }}
       >
-        <Text>Modal!</Text>
-        <Button title="Hide popup" onPress={() => navigation.goBack()} />
+        <Slider
+          value={this.props.radius}
+          minimumValue={MIN_RADIUS}
+          maximumValue={MAX_RADIUS}
+          step={5}
+          onValueChange={val => {
+            this.updateRadius(val);
+          }}
+        />
       </TouchableOpacity>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    radius: state.radius.radius
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      setRadius
+    },
+    dispatch
+  );
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ModalScreen);

@@ -1,0 +1,5 @@
+export const SET_RADIUS = "SET_RADIUS";
+export const REMOVE_RADIUS = "REMOVE_RADIUS";
+
+export const UI_START_LOADING = "UI_START_LOADING";
+export const UI_STOP_LOADING = "UI_STOP_LOADING";

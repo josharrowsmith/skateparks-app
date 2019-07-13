@@ -1,7 +1,9 @@
 import React from "react";
 import { AppLoading } from "expo";
+import { Provider } from "react-redux";
 import { func } from "./src/constants";
 import Stack from "./src/navigation/Stack";
+import store from "./src/store/configStore";
 
 class App extends React.Component {
   constructor(props) {
@@ -25,9 +27,9 @@ class App extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <Provider store={store}>
         <Stack />
-      </React.Fragment>
+      </Provider>
     );
   }
 }

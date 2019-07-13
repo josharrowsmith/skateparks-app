@@ -1,5 +1,8 @@
 import React from "react";
 import { View, StyleSheet, Dimensions, Text } from "react-native";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { setRadius } from "../store/actions/radius";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import { GeoFirestore } from "geofirestore";
@@ -17,7 +20,7 @@ const GEOLOCATION_OPTIONS = {
 };
 
 // eslint-disable-next-line react/prefer-stateless-function
-export default class MapScreen extends React.Component {
+class MapScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,7 +28,7 @@ export default class MapScreen extends React.Component {
       location: null,
       tracking: false,
       parks: [],
-      showCards: false,
+      showCards: false
     };
   }
 
@@ -49,18 +52,27 @@ export default class MapScreen extends React.Component {
     }
   }
 
-  /*eslint-disable */
+  async componentDidUpdate(prevProps) {
+    const { location } = this.state;
+    if (prevProps.radius !== this.props.radius) {
+      if (prevProps.radius > this.props.radius) {
+        this.getParks(location);
+      } else {
+        this.getParks(location);
+      }
+    }
+  }
+
   //if user location changes
   locationChanged = location => {
     this.setState({ location, tick: this.state.tick + 1, data: [] });
     this.getParks(location);
   };
-  /*eslint-enable */
 
   async getParks(location) {
     const lat = location.coords.latitude;
     const long = location.coords.longitude;
-    const radius = 5;
+    const radius = this.props.radius;
     const firestore = firebase.firestore();
     const geofirestore = new GeoFirestore(firestore);
     const geocollection = geofirestore.collection("skateparks");
@@ -98,7 +110,6 @@ export default class MapScreen extends React.Component {
     });
   };
 
-
   render() {
     const { parks, location, showCards } = this.state;
     const { navigation } = this.props;
@@ -113,10 +124,7 @@ export default class MapScreen extends React.Component {
               showCards={showCards}
               navigation={navigation}
             />
-            <Nav
-              navigation={navigation}
-              toggle={this.toggleAction}
-            />
+            <Nav navigation={navigation} toggle={this.toggleAction} />
           </>
         )}
         {!location && <Loading />}
@@ -124,3 +132,23 @@ export default class MapScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    radius: state.radius.radius
+  };
+};
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setRadius: setRadius
+    },
+    dispatch
+  );
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MapScreen);
