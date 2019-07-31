@@ -64,10 +64,13 @@ const formatTime = sec => {
   return `${padTime(minutes, 1)}:${padTime(seconds, 2)}`;
 };
 
+const BACKGROUND_LOCATION_TASK_NAME = 'bg-location-name'
+
 export default {
   cacheFonts,
   cacheImages,
   loadAssetsAsync,
   cameraAccessAsync,
-  formatTime
+  formatTime,
+  BACKGROUND_LOCATION_TASK_NAME
 };

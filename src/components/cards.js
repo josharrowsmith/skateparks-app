@@ -5,14 +5,9 @@ import {
   Animated,
   Image,
   TouchableOpacity,
-  StyleSheet,
-  Dimensions
+  StyleSheet
 } from "react-native";
-
-const { width, height } = Dimensions.get("window");
-
-const CARD_HEIGHT = height / 3.5;
-const CARD_WIDTH = width * 0.7;
+import { device } from "../constants";
 
 export default class Cards extends React.Component {
   constructor(props) {
@@ -31,7 +26,7 @@ export default class Cards extends React.Component {
     if (this.scroll) {
       this.scroll
         .getNode()
-        .scrollTo({ x: index * CARD_WIDTH, y: 0, animated: true });
+        .scrollTo({ x: index * device.cardWidth, y: 0, animated: true });
     }
   }
 
@@ -41,7 +36,7 @@ export default class Cards extends React.Component {
       <Animated.ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        snapToInterval={CARD_WIDTH}
+        snapToInterval={device.cardWidth}
         ref={c => {
           this.scroll = c;
         }}
@@ -107,7 +102,7 @@ const styles = StyleSheet.create({
     paddingVertical: 0
   },
   endPadding: {
-    paddingRight: width - CARD_WIDTH
+    paddingRight: device.width - device.cardWidth
   },
   card: {
     elevation: 2,
@@ -118,8 +113,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.3,
     shadowOffset: { x: 2, y: -2 },
-    height: CARD_HEIGHT,
-    width: CARD_WIDTH
+    height: device.cardHeight,
+    width: device.cardWidth
   },
   longPress: {
     width: "100%",
@@ -148,7 +143,7 @@ const styles = StyleSheet.create({
   distance: {
     flex: 1,
     marginTop: -50,
-    marginLeft: CARD_WIDTH - 100
+    marginLeft: device.cardWidth - 100
   },
   distanceText: {
     color: "white",

@@ -8,10 +8,8 @@ import * as Permissions from "expo-permissions";
 import { GeoFirestore } from "geofirestore";
 import firebase from "../config/firebase";
 import { gStyle } from "../constants";
-import Map from "../components/map";
 import Loading from "../components/loading";
 import Nav from "../components/nav";
-import Cards from "../components/cards";
 import Markers from "./Markers";
 
 const GEOLOCATION_OPTIONS = {
@@ -70,38 +68,42 @@ class MapScreen extends React.Component {
   };
 
   async getParks(location) {
-    const lat = location.coords.latitude;
-    const long = location.coords.longitude;
-    const radius = this.props.radius;
-    const firestore = firebase.firestore();
-    const geofirestore = new GeoFirestore(firestore);
-    const geocollection = geofirestore.collection("skateparks");
+    try {
+      const lat = location.coords.latitude;
+      const long = location.coords.longitude;
+      const radius = this.props.radius;
+      const firestore = firebase.firestore();
+      const geofirestore = new GeoFirestore(firestore);
+      const geocollection = geofirestore.collection("skateparks");
 
-    let query = await geocollection.limit(50).near({
-      center: new firebase.firestore.GeoPoint(lat, long),
-      radius: radius
-    });
-
-    let docQuery = await query.onSnapshot(snapshot => {
-      let parks = [];
-
-      for (let i = 0; i < snapshot.docs.length; i++) {
-        let { doc } = snapshot.docChanges()[i];
-        let park = {
-          ...snapshot.docs[i].data(),
-          distance: doc.distance,
-          id: snapshot.docs[i].id
-        };
-        parks.push(park);
-      }
-
-      //Doesnt sort
-      const newdata = parks.sort(function(a, b) {
-        return a.distance - b.distance;
+      let query = await geocollection.limit(50).near({
+        center: new firebase.firestore.GeoPoint(lat, long),
+        radius: radius
       });
 
-      this.setState({ parks: newdata, showMap: true });
-    });
+      let docQuery = await query.onSnapshot(snapshot => {
+        let parks = [];
+
+        for (let i = 0; i < snapshot.docs.length; i++) {
+          let { doc } = snapshot.docChanges()[i];
+          let park = {
+            ...snapshot.docs[i].data(),
+            distance: doc.distance,
+            id: snapshot.docs[i].id
+          };
+          parks.push(park);
+        }
+
+        //Doesnt sort
+        const newdata = parks.sort(function(a, b) {
+          return a.distance - b.distance;
+        });
+
+        this.setState({ parks: newdata, showMap: true });
+      });
+    } catch {
+      console.log("something went wrong")
+    }
   }
 
   toggleAction = () => {
@@ -111,7 +113,13 @@ class MapScreen extends React.Component {
   };
 
   render() {
-    const { parks, location, showCards, latitudeDelta, longitudeDelta } = this.state;
+    const {
+      parks,
+      location,
+      showCards,
+      latitudeDelta,
+      longitudeDelta
+    } = this.state;
     const { navigation, radius } = this.props;
 
     return (

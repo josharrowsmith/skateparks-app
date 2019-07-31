@@ -1,9 +1,7 @@
 import React from "react";
-import { View, Animated, StyleSheet, Dimensions } from "react-native";
+import { View, Animated, StyleSheet } from "react-native";
 import MapView from "react-native-maps";
-
-const { width } = Dimensions.get("window");
-const CARD_WIDTH = width * 0.7;
+import { device } from "../constants";
 
 export default class Markers extends React.Component {
   constructor(props) {
@@ -16,9 +14,9 @@ export default class Markers extends React.Component {
     // Need to figure out how to move this
     const interpolations = markers.map((marker, index) => {
       const inputRange = [
-        (index - 1) * CARD_WIDTH,
-        index * CARD_WIDTH,
-        (index + 1) * CARD_WIDTH
+        (index - 1) * device.cardWidth,
+        index * device.cardWidth,
+        (index + 1) * device.cardWidth
       ];
       const scale = animation.interpolate({
         inputRange,

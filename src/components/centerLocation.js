@@ -1,18 +1,22 @@
 import React from "react";
-import { Button, View, StyleSheet } from "react-native";
+import { TouchableOpacity, StyleSheet } from "react-native";
+import Location from "../assets/icons/location";
 
-const centerLocation = ({ pressed }) => (
-  <View style={styles.container}>
-    <Button title="go home" onPress={pressed} />
-  </View>
+const CenterLocation = ({ pressed }) => (
+  <TouchableOpacity style={styles.container} onPress={pressed}>
+    <Location size={35} />
+  </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
   container: {
-    alignSelf: "flex-end",
     position: "absolute",
-    justifyContent: "center"
+    justifyContent: "center",
+    right: 20,
+    backgroundColor: "#fff",
+    borderRadius: 25,
+    padding: 5
   }
 });
 
-export default centerLocation;
+export default CenterLocation;

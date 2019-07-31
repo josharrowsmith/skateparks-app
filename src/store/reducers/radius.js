@@ -1,7 +1,7 @@
 import { SET_RADIUS, REMOVE_RADIUS } from "../actions/actionTypes";
 
 const initialState = {
-  radius: 8
+  radius: 5
 };
 
 const reducer = (state = initialState, action) => {

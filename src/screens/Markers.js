@@ -4,11 +4,8 @@ import MapView from "react-native-maps";
 import Cards from "../components/cards";
 import Markerss from "../components/markers";
 import CurrentLocation from "../components/locationMarker";
-import Home from "../components/centerLocation";
-
-const { width } = Dimensions.get("window");
-
-const CARD_WIDTH = width * 0.7;
+import CenterLocation from "../components/centerLocation";
+import { device } from "../constants";
 
 export default class Markers extends Component {
   constructor(props) {
@@ -17,7 +14,7 @@ export default class Markers extends Component {
       markers: null,
       scale: new Animated.Value(0),
       index: 0,
-      pressed: false,
+      pressed: true,
       latitudeDelta: 0.1,
       longitudeDelta: 0.1
     };
@@ -30,7 +27,7 @@ export default class Markers extends Component {
 
     this.animation.addListener(({ value }) => {
       const { markers } = this.props;
-      let index = Math.floor(value / CARD_WIDTH + 0.7); // animate 80% away from landing on the next item
+      let index = Math.floor(value / device.cardWidth + 0.7); // animate 80% away from landing on the next item
       if (index >= markers.length) {
         index = markers.length - 1;
       }
@@ -101,10 +98,18 @@ export default class Markers extends Component {
     }
   };
 
-  toggleAction = () => {
-    this.setState({
-      pressed: !this.state.pressed
-    });
+  toggleAction = async () => {
+    const { longitudeDelta, latitudeDelta, pressed } = this.state;
+    const { location } = this.props;
+    this.map.animateToRegion(
+      {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta,
+        longitudeDelta
+      },
+      100
+    );
   };
 
   render() {
@@ -114,7 +119,7 @@ export default class Markers extends Component {
       <>
         <MapView
           ref={map => (this.map = map)}
-          style={{ alignSelf: "stretch", flex: 1, marginTop: -300 }}
+          style={{ alignSelf: "stretch", flex: 1, marginTop: -200 }}
           initialRegion={{
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
@@ -125,6 +130,7 @@ export default class Markers extends Component {
           <CurrentLocation location={location} />
           <Markerss markers={markers} animation={this.animation} />
         </MapView>
+        <CenterLocation pressed={this.toggleAction} />
         {showCards && (
           <Cards
             markers={markers}
