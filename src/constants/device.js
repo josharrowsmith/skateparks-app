@@ -7,7 +7,7 @@ import { Dimensions, Platform } from "react-native";
 const windowInfo = Dimensions.get("window");
 const { height, width } = windowInfo;
 const aspectRatio = height / width;
-
+const cardWidth = 0.8;
 // is iPad
 const { isPad } = Platform;
 
@@ -24,7 +24,8 @@ if (Platform.OS === "ios") {
 export default {
   aspectRatio,
   height,
+  width,
   iPhoneX,
   isPad,
-  width
+  cardWidth
 };

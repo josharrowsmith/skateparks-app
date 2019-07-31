@@ -15,10 +15,7 @@ export default class Setttings extends React.Component {
 
     return (
       <View style={gStyle.container}>
-        <Text>Welcome</Text>
-        <Button title="press me" onPress={() => navigation.navigate("Home")}>
-          press me
-        </Button>
+        <Text>Settings</Text>
       </View>
     );
   }

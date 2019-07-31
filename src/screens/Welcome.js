@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, BackHandler } from "react-native";
 import { gStyle } from "../constants";
 
 // eslint-disable-next-line react/prefer-stateless-function

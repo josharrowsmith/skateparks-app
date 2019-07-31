@@ -3,6 +3,7 @@ import Welcome from "../screens/Welcome";
 import HomeScreen from "../screens/HomeScreen";
 import SettingScreen from "../screens/Setting";
 import ModalScreen from "../screens/ModalScreen";
+import MarkerScreen from "../screens/MarkerScreen";
 
 const StackNavigator = createStackNavigator(
   {
@@ -24,13 +25,19 @@ const StackNavigator = createStackNavigator(
         gesturesEnabled: false
       }
     },
+    Marker: {
+      screen: MarkerScreen,
+      navigationOptions: {
+        gesturesEnabled: false
+      }
+    },
     Modal: {
       screen: ModalScreen
     }
   },
   {
     headerMode: "none",
-    initialRouteName: "Welcome",
+    initialRouteName: "Home",
     mode: "modal",
     transparentCard: true,
     cardStyle: { opacity: 1 }

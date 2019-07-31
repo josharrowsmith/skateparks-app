@@ -5,13 +5,18 @@ import { bindActionCreators } from "redux";
 import { setRadius } from "../store/actions/radius";
 
 const MAX_RADIUS = 20;
-const MIN_RADIUS = 5;
+const MIN_RADIUS = 0.1;
 
 class ModalScreen extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  componentWillMount() {
+    this.props.setRadius(this.props.radius)
+  }
+
+  
   updateRadius = val => {
     this.props.setRadius(val);
   };

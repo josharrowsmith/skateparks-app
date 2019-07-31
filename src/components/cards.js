@@ -40,7 +40,6 @@ export default class Cards extends React.Component {
     return (
       <Animated.ScrollView
         horizontal
-        scrollEventThrottle={1}
         showsHorizontalScrollIndicator={false}
         snapToInterval={CARD_WIDTH}
         ref={c => {
@@ -59,14 +58,24 @@ export default class Cards extends React.Component {
           { useNativeDriver: true }
         )}
         style={styles.scrollView}
+        contentContainerStyle={styles.endPadding}
       >
         {markers.map(marker => (
           <View style={styles.card} key={marker.id}>
-            <Image
-              source={{ uri: marker.image }}
-              style={styles.cardImage}
-              resizeMode="cover"
-            />
+            <TouchableOpacity
+              style={styles.longPress}
+              onLongPress={() =>
+                navigation.navigate("Marker", {
+                  marker
+                })
+              }
+            >
+              <Image
+                source={{ uri: marker.image }}
+                style={styles.cardImage}
+                resizeMode="cover"
+              />
+            </TouchableOpacity>
             <View style={styles.distance}>
               <Text style={styles.distanceText}>
                 {marker.distance.toFixed(2)}
@@ -101,16 +110,21 @@ const styles = StyleSheet.create({
     paddingRight: width - CARD_WIDTH
   },
   card: {
-    padding: 0,
     elevation: 2,
-    backgroundColor: "#FFF",
-    marginHorizontal: 10,
+    backgroundColor: "transparent",
+    // marginHorizontal: 10,
+    padding: 10,
     shadowColor: "#000",
     shadowRadius: 5,
     shadowOpacity: 0.3,
     shadowOffset: { x: 2, y: -2 },
     height: CARD_HEIGHT,
     width: CARD_WIDTH
+  },
+  longPress: {
+    width: "100%",
+    height: "100%",
+    opacity: 1
   },
   cardImage: {
     flex: 3,

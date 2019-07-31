@@ -111,8 +111,8 @@ class MapScreen extends React.Component {
   };
 
   render() {
-    const { parks, location, showCards } = this.state;
-    const { navigation } = this.props;
+    const { parks, location, showCards, latitudeDelta, longitudeDelta } = this.state;
+    const { navigation, radius } = this.props;
 
     return (
       <View style={gStyle.container}>
@@ -123,6 +123,7 @@ class MapScreen extends React.Component {
               markers={parks}
               showCards={showCards}
               navigation={navigation}
+              radius={radius}
             />
             <Nav navigation={navigation} toggle={this.toggleAction} />
           </>

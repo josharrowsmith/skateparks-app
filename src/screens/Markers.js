@@ -16,21 +16,21 @@ export default class Markers extends Component {
     this.state = {
       markers: null,
       scale: new Animated.Value(0),
-      latitudeDelta: 0.1,
-      longitudeDelta: 0.1,
       index: 0,
-      pressed: false
+      pressed: false,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1
     };
   }
 
   componentWillMount() {
     const { latitudeDelta, longitudeDelta } = this.state;
-    this.index = 0;
+
     this.animation = new Animated.Value(0);
 
     this.animation.addListener(({ value }) => {
       const { markers } = this.props;
-      let index = Math.floor(value / CARD_WIDTH + 0.8); // animate 80% away from landing on the next item
+      let index = Math.floor(value / CARD_WIDTH + 0.7); // animate 80% away from landing on the next item
       if (index >= markers.length) {
         index = markers.length - 1;
       }
@@ -57,19 +57,48 @@ export default class Markers extends Component {
     });
   }
 
+  async componentDidUpdate(prevProps) {
+    const { radius } = this.props;
+    if (prevProps.radius !== this.props.radius) {
+      if (prevProps.radius > this.props.radius) {
+        this.zommIn();
+      } else {
+        this.zommOut();
+      }
+    }
+  }
+  //Zooms in the map on new radius
+  zommIn = () => {
+    if (this.props.radius >= 5) {
+      region = {
+        latitude: this.props.location.coords.latitude,
+        longitude: this.props.location.coords.longitude,
+        latitudeDelta: this.state.latitudeDelta - 0.2,
+        longitudeDelta: this.state.longitudeDelta - 0.2
+      };
+      this.setState({
+        latitudeDelta: region.latitudeDelta,
+        longitudeDelta: region.longitudeDelta
+      });
+      this.map.animateToRegion(region, 500);
+    }
+  };
+
   //Zooms out the map on new radius
   zommOut = () => {
-    region = {
-      latitude: this.props.location.coords.latitude,
-      longitude: this.props.location.coords.longitude,
-      latitudeDelta: this.state.latitudeDelta + 0.2,
-      longitudeDelta: this.state.longitudeDelta + 0.2
-    };
-    this.setState({
-      latitudeDelta: region.latitudeDelta,
-      longitudeDelta: region.longitudeDelta
-    });
-    this.map.animateToRegion(region, 500);
+    if (this.props.radius > 6) {
+      region = {
+        latitude: this.props.location.coords.latitude,
+        longitude: this.props.location.coords.longitude,
+        latitudeDelta: this.state.latitudeDelta + 0.2,
+        longitudeDelta: this.state.longitudeDelta + 0.2
+      };
+      this.setState({
+        latitudeDelta: region.latitudeDelta,
+        longitudeDelta: region.longitudeDelta
+      });
+      this.map.animateToRegion(region, 500);
+    }
   };
 
   toggleAction = () => {
@@ -89,15 +118,20 @@ export default class Markers extends Component {
           initialRegion={{
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
-            latitudeDelta: 0.09,
-            longitudeDelta: 0.09
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1
           }}
         >
           <CurrentLocation location={location} />
           <Markerss markers={markers} animation={this.animation} />
         </MapView>
         {showCards && (
-          <Cards markers={markers} animation={this.animation} index={index} navigation={navigation}/>
+          <Cards
+            markers={markers}
+            animation={this.animation}
+            index={index}
+            navigation={navigation}
+          />
         )}
       </>
     );
