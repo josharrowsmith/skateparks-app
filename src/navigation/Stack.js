@@ -37,7 +37,7 @@ const StackNavigator = createStackNavigator(
   },
   {
     headerMode: "none",
-    initialRouteName: "Setting",
+    initialRouteName: "Welcome",
     mode: "modal",
     transparentCard: true,
     cardStyle: { opacity: 1 }

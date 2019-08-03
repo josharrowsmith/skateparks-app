@@ -1,17 +1,16 @@
+/* eslint-disable */
 import { GeoFirestore } from "geofirestore";
 import firebase from "../../config/firebase";
 
 // Sends the notification
-export const Msg = (name, distance) => {
-  const neeeew = distance.toString();
-  let TokenDir = firebase.database().ref("/users/");
-  TokenDir.on("value", snapshot => {
-    let data = snapshot.child("expoToken").val();
-    return fetch("https://exp.host/--/api/v2/push/send", {
+export const Msg = async (name, distance) => {
+  const db = firebase.firestore();
+  db.collection("users").doc("IDs").get().then(snapshot => {
+    const token = snapshot.data().token;
+    fetch("https://exp.host/--/api/v2/push/send", {
       body: JSON.stringify({
-        to: data,
+        to: token,
         title: name,
-        body: neeeew,
         channelId: "test",
         priority: "high"
       }),
@@ -20,8 +19,9 @@ export const Msg = (name, distance) => {
       },
       method: "POST"
     });
-  });
+  })
 };
+
 
 export const getParks = async (radius, location) => {
   const lat = location[0].coords.latitude;
@@ -54,7 +54,7 @@ export const getParks = async (radius, location) => {
     });
 
     newdata.forEach(i => {
-      Msg(i.name, i.distance)
+      Msg(i.name, i.distance);
     });
   });
 };
