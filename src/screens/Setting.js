@@ -12,14 +12,17 @@ import { setRadius } from "../store/actions/radius";
 import { func } from "../constants/index";
 import store from "../store/configStore";
 import { getParks } from "../store/actions/notification";
-import { gStyle } from "../constants";
+import Switch from "../components/switch";
+import Grid from "../components/grid";
 
 class Setting extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      enable: false,
-      location: null
+      location: null,
+      switchValue: false,
+      switchValue2: false,
+      switchValue3: false
     };
   }
 
@@ -44,7 +47,8 @@ class Setting extends React.Component {
     }
   }
 
-  enabled = async () => {
+  enabled = async value => {
+    this.setState({ switchValue: value });
     await Location.startLocationUpdatesAsync(
       func.BACKGROUND_LOCATION_TASK_NAME,
       {
@@ -53,16 +57,11 @@ class Setting extends React.Component {
         showsBackgroundLocationIndicator: true
       }
     );
-    this.setState({
-      enable: true
-    });
   };
 
-  disable = async () => {
+  disable = async value => {
+    this.setState({ switchValue: false });
     await Location.stopLocationUpdatesAsync(func.BACKGROUND_LOCATION_TASK_NAME);
-    this.setState({
-      enable: false
-    });
   };
 
   registerForPushNotificationsAsync = async () => {
@@ -94,17 +93,34 @@ class Setting extends React.Component {
     }
   };
 
+  ToggleSwitch = value => {
+    this.setState({ switchValue2: value });
+    console.log("Switch 1 is: " + value);
+  };
+
+  ToggleSwitch2 = value => {
+    this.setState({ switchValue3: value });
+    console.log("Switch 2 is: " + value);
+  };
+
   render() {
     const { navigation } = this.props;
 
     return (
-      <View style={gStyle.container}>
-        <Text>Settings</Text>
-        <Button
-          title="press me"
-          onPress={this.state.enable ? this.disable : this.enabled}
+      <Grid navigation={navigation}>
+        <Switch
+          ToggleSwitch={this.state.switchValue ? this.disable : this.enabled}
+          switchValue={this.state.switchValue}
         />
-      </View>
+        <Switch
+          ToggleSwitch={this.ToggleSwitch}
+          switchValue={this.state.switchValue2}
+        />
+        <Switch
+          ToggleSwitch={this.ToggleSwitch2}
+          switchValue={this.state.switchValue3}
+        />
+      </Grid>
     );
   }
 }
@@ -141,7 +157,6 @@ if (!TaskManager.isTaskDefined(func.BACKGROUND_LOCATION_TASK_NAME)) {
       }
       if (data) {
         const { locations } = data;
-        console.log(locations)
         //Unsure how to access state outside of react, so ill just export the store for now.
         const state = store.getState();
         const radius = state.radius.radius;
