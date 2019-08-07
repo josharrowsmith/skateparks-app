@@ -1,5 +1,7 @@
 import React from "react";
 import { Text, View, Button, BackHandler } from "react-native";
+import LottieManager from "../components/lottieManger";
+import LottieAnimation from "../assets/data/bike.json";
 import { gStyle } from "../constants";
 
 // eslint-disable-next-line react/prefer-stateless-function
@@ -21,10 +23,35 @@ export default class Welcome extends React.Component {
 
     return (
       <View style={gStyle.container}>
-        <Text>Welcome</Text>
-        <Button title="press me" onPress={() => navigation.navigate("Home")}>
-          press me
-        </Button>
+        <Text
+          style={{
+            fontSize: 40,
+            fontWeight: "900",
+            textTransform: "uppercase"
+          }}
+        >
+          Find
+        </Text>
+        <LottieManager
+          json={LottieAnimation}
+          height={280}
+          width={30}
+          style={{
+            marginTop: -50,
+            zIndex: -450000,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        />
+        <View style={{ width: 300 }}>
+          <Button
+            title="press me"
+            onPress={() => navigation.navigate("Home")}
+            color="black"
+          >
+            press me
+          </Button>
+        </View>
       </View>
     );
   }

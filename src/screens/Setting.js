@@ -9,6 +9,7 @@ import firebase from "../config/firebase";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { setRadius } from "../store/actions/radius";
+import { setNotifications, removeNotifications } from "../store/actions/switch";
 import { func } from "../constants/index";
 import store from "../store/configStore";
 import { getParks } from "../store/actions/notification";
@@ -20,7 +21,7 @@ class Setting extends React.Component {
     super(props);
     this.state = {
       location: null,
-      switchValue: false,
+      switchValue: this.props.notification,
       switchValue2: false,
       switchValue3: false
     };
@@ -48,7 +49,7 @@ class Setting extends React.Component {
   }
 
   enabled = async value => {
-    this.setState({ switchValue: value });
+    this.props.setNotifications();
     await Location.startLocationUpdatesAsync(
       func.BACKGROUND_LOCATION_TASK_NAME,
       {
@@ -60,7 +61,7 @@ class Setting extends React.Component {
   };
 
   disable = async value => {
-    this.setState({ switchValue: false });
+    this.props.removeNotifications();
     await Location.stopLocationUpdatesAsync(func.BACKGROUND_LOCATION_TASK_NAME);
   };
 
@@ -105,12 +106,11 @@ class Setting extends React.Component {
 
   render() {
     const { navigation } = this.props;
-
     return (
       <Grid navigation={navigation}>
         <Switch
-          ToggleSwitch={this.state.switchValue ? this.disable : this.enabled}
-          switchValue={this.state.switchValue}
+          ToggleSwitch={this.props.notification ? this.disable : this.enabled}
+          switchValue={this.props.notification}
         />
         <Switch
           ToggleSwitch={this.ToggleSwitch}
@@ -127,14 +127,17 @@ class Setting extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    radius: state.radius.radius
+    radius: state.radius.radius,
+    notification: state.notification.notification
   };
 };
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setRadius: setRadius
+      setRadius: setRadius,
+      setNotifications: setNotifications,
+      removeNotifications: removeNotifications
     },
     dispatch
   );

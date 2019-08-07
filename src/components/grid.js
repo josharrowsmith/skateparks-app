@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     paddingLeft: 30,
-    marginTop: 20,
+    marginTop: 10,
     justifyContent: "flex-start",
     alignItems: "flex-start"
   },
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   h2: {
-    fontSize: 20,
+    fontSize: 15,
     textTransform: "uppercase",
     color: "white"
   },

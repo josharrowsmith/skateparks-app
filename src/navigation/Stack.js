@@ -44,6 +44,7 @@ const StackNavigator = createStackNavigator(
   }
 );
 
+
 const App = createAppContainer(StackNavigator);
 
 export default App;

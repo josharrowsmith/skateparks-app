@@ -5,7 +5,8 @@ import {
   Animated,
   Image,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Linking
 } from "react-native";
 import { device } from "../constants";
 
@@ -73,18 +74,24 @@ export default class Cards extends React.Component {
             </TouchableOpacity>
             <View style={styles.distance}>
               <Text style={styles.distanceText}>
-                {marker.distance.toFixed(2)}
+                {marker.distance.toFixed(2) + "kms"}
               </Text>
             </View>
-            <Text style={styles.cardtitle}>{marker.name}</Text>
-            <View style={styles.textContent}>
-              <Text>Rating</Text>
-              <TouchableOpacity
-                style={styles.mapbtn}
-                onPress={() => navigation.navigate("Setting")}
-              >
-                <Text style={styles.mapText}>Press Me</Text>
-              </TouchableOpacity>
+            <View style={styles.container}>
+              <Text style={styles.cardtitle}>{marker.name}</Text>
+              <View style={styles.textContent}>
+                <Text>Rating</Text>
+                <TouchableOpacity
+                  style={styles.mapbtn}
+                  onPress={() =>
+                    Linking.openURL(
+                      `google.navigation:q=${marker.coordinates._lat}+${marker.coordinates._long}`
+                    )
+                  }
+                >
+                  <Text style={styles.mapText}>Press Me</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         ))}
@@ -96,7 +103,7 @@ export default class Cards extends React.Component {
 const styles = StyleSheet.create({
   scrollView: {
     position: "absolute",
-    bottom: 80,
+    bottom: 60,
     left: 0,
     right: 0,
     paddingVertical: 0
@@ -118,15 +125,20 @@ const styles = StyleSheet.create({
   },
   longPress: {
     width: "100%",
-    height: "100%",
+    height: "70%",
     opacity: 1
   },
   cardImage: {
-    flex: 3,
+    flex: 2,
     width: "100%",
     alignSelf: "center",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10
+  },
+  container: {
+    backgroundColor: "white",
+    height: "30%",
+    width: "100%"
   },
   cardtitle: {
     fontSize: 16,
