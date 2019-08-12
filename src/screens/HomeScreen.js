@@ -102,7 +102,7 @@ class MapScreen extends React.Component {
         this.setState({ parks: newdata, showMap: true });
       });
     } catch {
-      console.log("something went wrong")
+      console.log("something went wrong");
     }
   }
 
@@ -136,7 +136,7 @@ class MapScreen extends React.Component {
             <Nav navigation={navigation} toggle={this.toggleAction} />
           </>
         )}
-        {!location && <Loading />}
+        {!location && !parks && <Loading />}
       </View>
     );
   }

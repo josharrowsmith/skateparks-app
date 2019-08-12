@@ -28,6 +28,21 @@ class Setting extends React.Component {
   }
 
   async componentDidMount() {
+    let status;
+    status = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    let statusNotifications = status.status;
+    console.log("Notifications Permissions: ", statusNotifications);
+
+    if (statusNotifications !== "granted") {
+      console.log("Requesting Notification Permissions");
+      status = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      statusNotifications = status.status;
+    }
+
+    if (statusNotifications !== "granted" || statusLocation !== "granted") {
+      console.log("Permissions not granted");
+      return;
+    }
     this.registerForPushNotificationsAsync();
 
     if (

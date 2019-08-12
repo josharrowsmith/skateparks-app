@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View, Button, Image, StyleSheet } from "react-native";
 import { gStyle } from "../constants";
 
-export default class Setttings extends React.Component {
+export default class Marker extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -16,12 +16,12 @@ export default class Setttings extends React.Component {
 
     return (
       <View style={gStyle.container}>
-        <Text>{marker.name}</Text>
         <Image
           source={{ uri: marker.image }}
           style={styles.cardImage}
-          resizeMode="cover"
+          resizeMode="contain"
         />
+        <Text>{marker.name}</Text>
         <Button title="Go back" onPress={() => navigation.goBack()} />
       </View>
     );
