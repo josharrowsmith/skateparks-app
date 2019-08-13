@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View, Button, BackHandler } from "react-native";
-import LottieManager from "../components/lottieManger";
+import LottieManager from "../components/home/lottieManger";
 import LottieAnimation from "../assets/data/bike.json";
 import { gStyle } from "../constants";
 

@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
-import { colors, device } from "../constants";
+import { colors, device } from "../../constants";
 
-import SettingIcon from "../assets/icons/Setting";
-import Radar from "../assets/icons/Radar";
+import SettingIcon from "../../assets/icons/Setting";
+import Radar from "../../assets/icons/Radar";
 
 const Nav = ({ navigation, toggle }) => (
   <View style={styles.container}>

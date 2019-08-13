@@ -1,11 +1,16 @@
-import { createAppContainer, createStackNavigator } from "react-navigation";
-import Welcome from "../screens/Welcome";
+import {
+  createAppContainer,
+  createStackNavigator,
+  createSwitchNavigator
+} from "react-navigation";
+import Welcome from "../screens/WelcomeScreen";
 import HomeScreen from "../screens/HomeScreen";
-import SettingScreen from "../screens/Setting";
+import SettingScreen from "../screens/SettingScreen";
 import ModalScreen from "../screens/ModalScreen";
 import MarkerScreen from "../screens/MarkerScreen";
+import AuthScreen from "../screens/AuthScreen";
 
-const StackNavigator = createStackNavigator(
+const MainNavigator = createStackNavigator(
   {
     Welcome: {
       screen: Welcome,
@@ -44,6 +49,20 @@ const StackNavigator = createStackNavigator(
   }
 );
 
-const App = createAppContainer(StackNavigator);
+const AuthNavigator = createStackNavigator(
+  {
+    Auth: AuthScreen
+  },
+  {
+    headerMode: "none"
+  }
+);
+
+const RootNavigator = createSwitchNavigator({
+  Auth: AuthNavigator,
+  Main: MainNavigator
+});
+
+const App = createAppContainer(MainNavigator);
 
 export default App;

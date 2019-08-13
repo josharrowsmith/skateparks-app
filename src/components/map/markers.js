@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Animated, StyleSheet } from "react-native";
 import MapView from "react-native-maps";
-import { device } from "../constants";
+import { device } from "../../constants";
 
 export default class Markers extends React.Component {
   constructor(props) {

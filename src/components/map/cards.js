@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Linking
 } from "react-native";
-import { device } from "../constants";
+import { device } from "../../constants";
 
 export default class Cards extends React.Component {
   constructor(props) {

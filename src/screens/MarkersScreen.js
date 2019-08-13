@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Dimensions, Animated, Button } from "react-native";
 import MapView from "react-native-maps";
-import Cards from "../components/cards";
-import Markerss from "../components/markers";
-import CurrentLocation from "../components/locationMarker";
-import CenterLocation from "../components/centerLocation";
+import Cards from "../components/map/cards";
+import Markerss from "../components/map/markers";
+import CurrentLocation from "../components/map/locationMarker";
+import CenterLocation from "../components/map/centerLocation";
 import { device } from "../constants";
 
 export default class Markers extends Component {

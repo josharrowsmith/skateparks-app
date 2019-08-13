@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
-import Location from "../assets/icons/location";
+import Location from "../../assets/icons/location";
 
 const CenterLocation = ({ pressed }) => (
   <TouchableOpacity style={styles.container} onPress={pressed}>

@@ -1,5 +1,7 @@
 import * as firebase from "firebase";
 import "firebase/firestore";
+import "firebase/app";
+
 import {
   API_KEY,
   AUTH_DOMAIN,

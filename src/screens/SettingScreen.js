@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, Button, Platform } from "react-native";
+import { TouchableOpacity, Platform, Text, View } from "react-native";
 import { Notifications } from "expo";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
@@ -10,11 +10,12 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { setRadius } from "../store/actions/radius";
 import { setNotifications, removeNotifications } from "../store/actions/switch";
+import { logoutUser } from "../store/actions/auth";
 import { func } from "../constants/index";
 import store from "../store/configStore";
 import { getParks } from "../store/actions/notification";
-import Switch from "../components/switch";
-import Grid from "../components/grid";
+import Switch from "../components/setting/switch";
+import Grid from "../components/setting/grid";
 
 class Setting extends React.Component {
   constructor(props) {
@@ -28,21 +29,6 @@ class Setting extends React.Component {
   }
 
   async componentDidMount() {
-    let status;
-    status = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-    let statusNotifications = status.status;
-    console.log("Notifications Permissions: ", statusNotifications);
-
-    if (statusNotifications !== "granted") {
-      console.log("Requesting Notification Permissions");
-      status = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      statusNotifications = status.status;
-    }
-
-    if (statusNotifications !== "granted" || statusLocation !== "granted") {
-      console.log("Permissions not granted");
-      return;
-    }
     this.registerForPushNotificationsAsync();
 
     if (
@@ -119,23 +105,43 @@ class Setting extends React.Component {
     console.log("Switch 2 is: " + value);
   };
 
+  LogOut = () => {
+    this.props.logoutUser();
+    this.props.navigation.navigate("Auth");
+  };
+
   render() {
     const { navigation } = this.props;
     return (
-      <Grid navigation={navigation}>
-        <Switch
-          ToggleSwitch={this.props.notification ? this.disable : this.enabled}
-          switchValue={this.props.notification}
-        />
-        <Switch
-          ToggleSwitch={this.ToggleSwitch}
-          switchValue={this.state.switchValue2}
-        />
-        <Switch
-          ToggleSwitch={this.ToggleSwitch2}
-          switchValue={this.state.switchValue3}
-        />
-      </Grid>
+      <View style={{ backgroundColor: "#4d4b4b", flex: 1 }}>
+        <Grid navigation={navigation}>
+          <Switch
+            ToggleSwitch={this.props.notification ? this.disable : this.enabled}
+            switchValue={this.props.notification}
+          />
+          <Switch
+            ToggleSwitch={this.ToggleSwitch}
+            switchValue={this.state.switchValue2}
+          />
+          <Switch
+            ToggleSwitch={this.ToggleSwitch2}
+            switchValue={this.state.switchValue3}
+          />
+        </Grid>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "white",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
+            width: 100,
+            height: 50
+          }}
+          onPress={this.LogOut}
+        >
+          <Text>Log Out</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 }
@@ -152,7 +158,8 @@ function mapDispatchToProps(dispatch) {
     {
       setRadius: setRadius,
       setNotifications: setNotifications,
-      removeNotifications: removeNotifications
+      removeNotifications: removeNotifications,
+      logoutUser: logoutUser
     },
     dispatch
   );

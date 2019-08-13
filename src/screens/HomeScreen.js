@@ -8,9 +8,9 @@ import * as Permissions from "expo-permissions";
 import { GeoFirestore } from "geofirestore";
 import firebase from "../config/firebase";
 import { gStyle } from "../constants";
-import Loading from "../components/loading";
-import Nav from "../components/nav";
-import Markers from "./Markers";
+import Loading from "../components/home/loading";
+import Nav from "../components/home/nav";
+import Markers from "./MarkersScreen";
 
 const GEOLOCATION_OPTIONS = {
   accuracy: Location.Accuracy.BestForNavigation,
