@@ -45,11 +45,11 @@ export default class Welcome extends React.Component {
         />
         <View style={{ width: 300 }}>
           <Button
-            title="press me"
+            title="Get Started"
             onPress={() => navigation.navigate("Home")}
             color="black"
           >
-            press me
+            Get Started
           </Button>
         </View>
       </View>

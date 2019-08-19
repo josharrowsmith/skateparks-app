@@ -67,7 +67,7 @@ export default class Cards extends React.Component {
               }
             >
               <Image
-                source={{ uri: marker.image }}
+                source={{ uri: marker.image[0] }}
                 style={styles.cardImage}
                 resizeMode="cover"
               />
@@ -89,7 +89,7 @@ export default class Cards extends React.Component {
                     )
                   }
                 >
-                  <Text style={styles.mapText}>Press Me</Text>
+                  <Text style={styles.mapText}>Maps</Text>
                 </TouchableOpacity>
               </View>
             </View>

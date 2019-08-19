@@ -1,8 +1,9 @@
 import React from "react";
-import { Slider, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { setRadius } from "../store/actions/radius";
+import Slider from "../components/map/slider";
 
 const MAX_RADIUS = 20;
 const MIN_RADIUS = 0.1;
@@ -13,10 +14,9 @@ class ModalScreen extends React.Component {
   }
 
   componentWillMount() {
-    this.props.setRadius(this.props.radius)
+    this.props.setRadius(this.props.radius);
   }
 
-  
   updateRadius = val => {
     this.props.setRadius(val);
   };
@@ -33,15 +33,7 @@ class ModalScreen extends React.Component {
           backgroundColor: "#00000080"
         }}
       >
-        <Slider
-          value={this.props.radius}
-          minimumValue={MIN_RADIUS}
-          maximumValue={MAX_RADIUS}
-          step={5}
-          onValueChange={val => {
-            this.updateRadius(val);
-          }}
-        />
+        <Slider />
       </TouchableOpacity>
     );
   }
