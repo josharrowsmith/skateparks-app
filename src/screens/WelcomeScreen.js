@@ -46,7 +46,7 @@ export default class Welcome extends React.Component {
         <View style={{ width: 300 }}>
           <Button
             title="Get Started"
-            onPress={() => navigation.navigate("Home")}
+            onPress={() => navigation.navigate("Auth")}
             color="black"
           >
             Get Started

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Animated, Dimensions } from "react-native";
 import * as GestureHandler from "react-native-gesture-handler";
+
 const { PanGestureHandler } = GestureHandler;
 
 const { width, height } = Dimensions.get("window");
@@ -10,15 +11,15 @@ const SLIDER_WIDTH = width - 48;
 const SLIDER_HEIGHT = 52;
 const MAX_OUTPUT_RANGE = SLIDER_WIDTH - SLIDER_HEIGHT;
 const SLIDER_SCALE = MAX_OUTPUT_RANGE / SLIDER_MAX_VALUE;
-const PRIMARY_COLOR = "#00f";
 
-export default class App extends Component {
+export default class Slider extends Component {
   constructor(props) {
     super(props);
     this.state = {
       value: SLIDER_MIN_VALUE,
       currentValue: SLIDER_MIN_VALUE
     };
+
     this._translateX = new Animated.Value(0);
     this._sliderFinalText = new Animated.Value(0);
     this._lastOffsetX = 0;
@@ -35,7 +36,6 @@ export default class App extends Component {
         useNativeDriver: true,
         listener: e => {
           const currentOffsetX = e.nativeEvent.translationX;
-          console.log(currentOffsetX);
           const value =
             SLIDER_MAX_VALUE > 10
               ? Math.floor((this._lastOffsetX + currentOffsetX) / SLIDER_SCALE)
@@ -73,6 +73,7 @@ export default class App extends Component {
       this.setState({
         currentValue: this.state.value
       });
+      this.props.sendData(this.state.value);
     }
   };
 
@@ -81,14 +82,8 @@ export default class App extends Component {
       <View style={styles.container}>
         <View style={styles.sliderContainer}>
           <View style={[styles.sliderRangeContainer, StyleSheet.absoluteFill]}>
-            <View style={styles.sliderMinMaxTextContainer}>
-              <Text style={styles.sliderMinMaxText}>{SLIDER_MIN_VALUE}</Text>
-            </View>
             <View style={styles.sliderRangeDotContainer}>
               <View style={styles.sliderRangeDot} />
-            </View>
-            <View style={styles.sliderMinMaxTextContainer}>
-              <Text style={styles.sliderMinMaxText}>{SLIDER_MAX_VALUE}</Text>
             </View>
           </View>
           <PanGestureHandler
@@ -115,11 +110,9 @@ export default class App extends Component {
                 }
               ]}
             >
-              <Animated.View style={styles.sliderHandleOuter}>
-                <View style={styles.sliderHandleInner}>
-                  <Text>{this.state.currentValue}</Text>
-                </View>
-              </Animated.View>
+              <View style={styles.sliderHandleInner}>
+                <Text>{this.state.value}km</Text>
+              </View>
             </Animated.View>
           </PanGestureHandler>
         </View>
@@ -133,7 +126,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "transparent"
+    backgroundColor: "#00000080"
   },
   sliderRangeContainer: {
     flexDirection: "row",
@@ -155,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   sliderRangeDot: {
-    width: "90%",
+    width: "100%",
     height: 1,
     marginHorizontal: 6,
     backgroundColor: "black",
@@ -164,7 +157,6 @@ const styles = StyleSheet.create({
   sliderContainer: {
     width: SLIDER_WIDTH,
     height: SLIDER_HEIGHT,
-    backgroundColor: PRIMARY_COLOR,
     borderRadius: 4,
     shadowColor: "black",
     shadowRadius: 8,
@@ -185,8 +177,9 @@ const styles = StyleSheet.create({
     height: SLIDER_HEIGHT,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: PRIMARY_COLOR,
-    borderRadius: SLIDER_HEIGHT / 2
+    borderRadius: SLIDER_HEIGHT / 2,
+    borderColor: "black",
+    borderWidth: 2
   },
   sliderHandleInner: {
     width: SLIDER_HEIGHT * 0.75,

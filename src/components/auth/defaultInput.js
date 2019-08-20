@@ -23,8 +23,7 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   invalid: {
-    backgroundColor: "#f9c0c0",
-    borderColor: "red"
+    borderBottomColor: "red"
   }
 });
 

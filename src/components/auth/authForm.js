@@ -18,6 +18,7 @@ import {
 } from "../../store/actions/auth";
 import DefaultInput from "./defaultInput";
 import validate from "./validation";
+import { device } from "../../constants";
 
 class Form extends Component {
   constructor(props) {
@@ -126,9 +127,12 @@ class Form extends Component {
 
   render() {
     let confirmPasswordControl = null;
+    let Title = (
+      <Text style={styles.h1}>Log in to Find.</Text>
+    )
     let submitButton = (
       <TouchableOpacity
-        color="#29aaf4"
+        style={styles.submitButton}
         onPress={this.authHandler}
         disabled={
           (!this.state.controls.confirmPassword.valid &&
@@ -137,7 +141,7 @@ class Form extends Component {
           !this.state.controls.password.valid
         }
       >
-        <Text>Submit</Text>
+        <Text style={styles.submitText}>Next</Text>
       </TouchableOpacity>
     );
     if (this.state.isLoading) {
@@ -157,14 +161,13 @@ class Form extends Component {
           />
         </View>
       );
+      Title = (
+        <Text style={styles.h1}>Sign Up.</Text>
+      )
     }
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <TouchableOpacity color="#29aaf4" onPress={this.switchAuthModeHandler}>
-          <Text>
-            Switch to {this.state.authMode === "login" ? "Sign Up" : "Login"}
-          </Text>
-        </TouchableOpacity>
+        {Title}
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inputContainer}>
             <DefaultInput
@@ -194,42 +197,70 @@ class Form extends Component {
             </View>
           </View>
         </TouchableWithoutFeedback>
-        {submitButton}
+        <View style={styles.buttonContainer}>
+          {submitButton}
+          <TouchableOpacity
+            style={styles.switchButton}
+            color="#29aaf4"
+            onPress={this.switchAuthModeHandler}
+          >
+            <Text>
+              Switch to {this.state.authMode === "login" ? "Sign Up" : "Login"}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  h1: {
+    fontSize: 32,
+    fontWeight: "700"
+  },
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  backgroundImage: {
-    width: "100%",
-    flex: 1
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    marginVertical: 20
   },
   inputContainer: {
-    width: "80%"
+    width: device.width - 20
   },
   input: {
-    backgroundColor: "#eee",
-    borderColor: "#bbb"
-  },
-  landscapePasswordContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between"
+    borderColor: "#fff",
+    borderBottomColor: "#eee"
   },
   portraitPasswordContainer: {
     flexDirection: "column",
     justifyContent: "flex-start"
   },
-  landscapePasswordWrapper: {
-    width: "45%"
-  },
   portraitPasswordWrapper: {
     width: "100%"
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    height: 50,
+    width: device.width - 20,
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  submitText: {
+    color: "#fff",
+    textAlign: "center",
+    alignSelf: "center"
+  },
+  switchButton: {
+    justifyContent: "center",
+    alignSelf: "center"
+  },
+  submitButton: {
+    backgroundColor: "#000",
+    width: 60,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: "center"
   }
 });
 

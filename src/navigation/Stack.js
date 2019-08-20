@@ -12,12 +12,6 @@ import AuthScreen from "../screens/AuthScreen";
 
 const MainNavigator = createStackNavigator(
   {
-    Welcome: {
-      screen: Welcome,
-      navigationOptions: {
-        gesturesEnabled: false
-      }
-    },
     Home: {
       screen: HomeScreen,
       navigationOptions: {
@@ -51,10 +45,17 @@ const MainNavigator = createStackNavigator(
 
 const AuthNavigator = createStackNavigator(
   {
-    Auth: AuthScreen
+    Auth: AuthScreen,
+    Welcome: {
+      screen: Welcome,
+      navigationOptions: {
+        gesturesEnabled: false,
+        header: null
+      }
+    }
   },
   {
-    headerMode: "none"
+    initialRouteName: "Welcome"
   }
 );
 
@@ -63,6 +64,6 @@ const RootNavigator = createSwitchNavigator({
   Main: MainNavigator
 });
 
-const App = createAppContainer(MainNavigator);
+const App = createAppContainer(RootNavigator);
 
 export default App;

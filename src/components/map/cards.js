@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
   card: {
     elevation: 2,
     backgroundColor: "transparent",
-    // marginHorizontal: 10,
     padding: 10,
     shadowColor: "#000",
     shadowRadius: 5,

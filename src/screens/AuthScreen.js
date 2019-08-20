@@ -14,7 +14,7 @@ class AuthScreen extends React.Component {
   }
 
   componentDidMount() {
-    // this.props.restoreSession();
+    // this.props.restoreSession();]
   }
 
   componentDidUpdate() {
