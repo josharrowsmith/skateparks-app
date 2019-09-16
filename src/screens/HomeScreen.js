@@ -32,11 +32,34 @@ class MapScreen extends React.Component {
 
   async componentDidMount() {
     // Statring location tracking
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== "granted") {
-      alert("Location permission required");
+    let status;
+    status = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    let statusNotifications = status.status;
+    console.log("Notifications Permissions: ", statusNotifications);
+
+    status = await Permissions.getAsync(Permissions.LOCATION);
+    let statusLocation = status.status;
+    console.log("Location Permissions: ", statusLocation);
+
+    if (statusNotifications !== "granted") {
+      console.log("Requesting Notification Permissions");
+      status = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      statusNotifications = status.status;
     }
-    // watches the postition
+
+    if (statusLocation !== "granted") {
+      console.log("Requesting Location Permissions");
+      status = await Permissions.askAsync(Permissions.LOCATION);
+      statusLocation = status.status;
+    }
+
+    if (statusNotifications !== "granted" || statusLocation !== "granted") {
+      console.log("Permissions not granted");
+      return;
+    }
+
+    console.log("Permissions Granted!");
+    // watches the postition, gives that timer error
     const sub = await Location.watchPositionAsync(
       GEOLOCATION_OPTIONS,
       this.locationChanged
@@ -63,7 +86,7 @@ class MapScreen extends React.Component {
 
   //if user location changes
   locationChanged = location => {
-    this.setState({ location, tick: this.state.tick + 1, data: [] });
+    this.setState({ location, tick: this.state.tick + 1 });
     this.getParks(location);
   };
 
@@ -136,7 +159,7 @@ class MapScreen extends React.Component {
             <Nav navigation={navigation} toggle={this.toggleAction} />
           </>
         )}
-        {!location && !parks && <Loading />}
+        {!location && <Loading />}
       </View>
     );
   }

@@ -9,6 +9,7 @@ import {
   Linking
 } from "react-native";
 import { device } from "../../constants";
+import Loading from "../home/loading";
 
 export default class Cards extends React.Component {
   constructor(props) {

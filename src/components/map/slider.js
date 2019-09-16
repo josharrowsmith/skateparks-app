@@ -5,7 +5,7 @@ import * as GestureHandler from "react-native-gesture-handler";
 const { PanGestureHandler } = GestureHandler;
 
 const { width, height } = Dimensions.get("window");
-const SLIDER_MIN_VALUE = 0;
+const SLIDER_MIN_VALUE = 0.001;
 const SLIDER_MAX_VALUE = 25;
 const SLIDER_WIDTH = width - 48;
 const SLIDER_HEIGHT = 52;
@@ -22,7 +22,7 @@ export default class Slider extends Component {
 
     this._translateX = new Animated.Value(0);
     this._sliderFinalText = new Animated.Value(0);
-    this._lastOffsetX = 0;
+    this._lastOffsetX = 0.01;
     this._sliderHandleAnimatedVal = new Animated.Value(0);
     this._onGestureEvent = Animated.event(
       [
@@ -44,7 +44,7 @@ export default class Slider extends Component {
                 );
 
           if (value <= 0) {
-            this.setState({ value: 0 });
+            this.setState({ value: 0.01 });
           } else if (value >= SLIDER_MAX_VALUE) {
             this.setState({ value: SLIDER_MAX_VALUE });
           } else {
@@ -55,10 +55,14 @@ export default class Slider extends Component {
     );
   }
 
+  componentDidMount() {
+    this.props.sendData(this.state.currentValue);
+  }
+
   _onHandlerStateChange = event => {
     if (event.nativeEvent.oldState === GestureHandler.State.ACTIVE) {
       if (event.nativeEvent.absoluteX <= 32) {
-        this._lastOffsetX = 0;
+        this._lastOffsetX = 0.01;
       } else if (event.nativeEvent.absoluteX >= width - 32) {
         this._lastOffsetX = MAX_OUTPUT_RANGE;
       } else {
@@ -66,16 +70,50 @@ export default class Slider extends Component {
       }
 
       this._translateX.setOffset(this._lastOffsetX);
-      this._translateX.setValue(0);
+      this._translateX.setValue(0.01);
     }
 
     if (event.nativeEvent.state === GestureHandler.State.END) {
-      this.setState({
-        currentValue: this.state.value
-      });
-      this.props.sendData(this.state.value);
+      this._animateSliderHandleDown();
+      this._setValueCallback();
     }
   };
+
+  _setValueCallback = () => {
+    Animated.sequence([
+      Animated.spring(this._sliderFinalText, {
+        toValue: 1,
+        useNativeDriver: true
+      }),
+      Animated.timing(this._sliderFinalText, {
+        toValue: 0,
+        delay: 1000,
+        useNativeDriver: true
+      })
+    ]).start();
+    this.setState({
+      currentValue: this.state.value
+    });
+    this.props.sendData(this.state.value);
+  };
+
+  _animateSliderHandleUp = () => {
+    Animated.spring(this._sliderHandleAnimatedVal, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 13
+    }).start();
+  };
+
+  _animateSliderHandleDown = () => {
+    Animated.spring(this._sliderHandleAnimatedVal, {
+      toValue: 0,
+      useNativeDriver: true,
+      tension: 80,
+      friction: 10
+    }).start();
+  };
+
 
   render() {
     return (
@@ -110,9 +148,35 @@ export default class Slider extends Component {
                 }
               ]}
             >
-              <View style={styles.sliderHandleInner}>
-                <Text>{this.state.value}km</Text>
-              </View>
+              <Animated.View
+                pointerEvents="none"
+                style={[
+                  styles.sliderHandleOuter,
+                  {
+                    transform: [
+                      {
+                        translateY: this._sliderHandleAnimatedVal.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [
+                            SLIDER_HEIGHT * 1.5 - SLIDER_HEIGHT,
+                            -20
+                          ]
+                        })
+                      },
+                      {
+                        scaleY: this._sliderHandleAnimatedVal.interpolate({
+                          inputRange: [0, 0.5, 1],
+                          outputRange: [1, 1.25, 1]
+                        })
+                      }
+                    ]
+                  }
+                ]}
+              >
+                <View style={styles.sliderHandleInner}>
+                  <Text>{this.state.value}</Text>
+                </View>
+              </Animated.View>
             </Animated.View>
           </PanGestureHandler>
         </View>

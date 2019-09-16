@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, AsyncStorage } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { loginUser, restoreSession } from "../store/actions/auth";
@@ -13,13 +13,20 @@ class AuthScreen extends React.Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    // this.props.restoreSession();]
+  async componentDidMount() {
+    const { navigation } = this.props;
+    const userData = await AsyncStorage.getItem("userData");
+    const transformedData = JSON.parse(userData);
+    const { token, userId, expiryDate } = transformedData;
+    const expirationDate = new Date(expiryDate);
+    if (expirationDate >= new Date() || token || userId) {
+      navigation.navigate("Home");
+    }
   }
 
   componentDidUpdate() {
     const { navigation, auth } = this.props;
-    if (auth.logged) {
+    if (auth.userId) {
       navigation.navigate("Home");
     }
   }

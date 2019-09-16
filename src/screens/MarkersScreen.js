@@ -115,6 +115,7 @@ export default class Markers extends Component {
   render() {
     const { location, markers, showCards, navigation } = this.props;
     const { index, pressed } = this.state;
+
     return (
       <>
         <MapView

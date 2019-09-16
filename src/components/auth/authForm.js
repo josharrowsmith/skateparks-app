@@ -11,11 +11,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-  loginUser,
-  signupUser,
-  restoreSession
-} from "../../store/actions/auth";
+import { login, signup } from "../../store/actions/auth";
 import DefaultInput from "./defaultInput";
 import validate from "./validation";
 import { device } from "../../constants";
@@ -56,7 +52,7 @@ class Form extends Component {
   };
 
   componentDidMount() {
-    this.props.restoreSession();
+    // this.props.restoreSession();
   }
 
   switchAuthModeHandler = () => {
@@ -73,9 +69,9 @@ class Form extends Component {
       password: this.state.controls.password.value
     };
     if (this.state.authMode === "login") {
-      this.props.loginUser(authData);
+      this.props.login(authData.email, authData.password);
     } else {
-      this.props.signupUser(authData);
+      this.props.signup(authData.email, authData.password);
     }
   };
 
@@ -127,9 +123,7 @@ class Form extends Component {
 
   render() {
     let confirmPasswordControl = null;
-    let Title = (
-      <Text style={styles.h1}>Log in to Find.</Text>
-    )
+    let Title = <Text style={styles.h1}>Log in to Find.</Text>;
     let submitButton = (
       <TouchableOpacity
         style={styles.submitButton}
@@ -161,9 +155,7 @@ class Form extends Component {
           />
         </View>
       );
-      Title = (
-        <Text style={styles.h1}>Sign Up.</Text>
-      )
+      Title = <Text style={styles.h1}>Sign Up.</Text>;
     }
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -273,9 +265,8 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      loginUser,
-      signupUser,
-      restoreSession
+      login,
+      signup
     },
     dispatch
   );

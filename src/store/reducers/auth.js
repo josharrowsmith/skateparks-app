@@ -1,62 +1,20 @@
-import {
-  SESSION_ERROR,
-  SESSION_LOADING,
-  SESSION_RESTORING,
-  SESSION_LOGOUT,
-  SESSION_SUCCESS,
-  SIGNUP_SUCCESS
-} from "../actions/actionTypes";
+import { AUTHENTICATE, LOGOUT } from "../actions/actionTypes";
 
 const initialState = {
-  restoring: false,
-  loading: false,
-  user: {},
-  error: null,
-  logged: null,
-  registered: null
+  token: null,
+  userId: null
 };
 
-const authReducer = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
-    case SESSION_RESTORING:
-      return { ...state, restoring: true };
-    case SESSION_LOADING:
-      return { ...state, restoring: false, loading: true, error: null };
-    case SESSION_SUCCESS:
+    case AUTHENTICATE:
       return {
-        ...state,
-        restoring: false,
-        loading: false,
-        user: action.user,
-        error: null,
-        logged: true,
-        registered: null
+        token: action.token,
+        userId: action.userId
       };
-    case SIGNUP_SUCCESS:
-      return {
-        ...state,
-        restoring: false,
-        loading: false,
-        user: action.user,
-        error: null,
-        logged: null,
-        registered: true
-      };
-    case SESSION_ERROR:
-      return {
-        ...state,
-        restoring: false,
-        loading: false,
-        user: null,
-        error: action.error,
-        logged: null,
-        registered: null
-      };
-    case SESSION_LOGOUT:
+    case LOGOUT:
       return initialState;
     default:
       return state;
   }
 };
-
-export default authReducer;

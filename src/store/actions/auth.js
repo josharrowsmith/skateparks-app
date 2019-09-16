@@ -1,89 +1,134 @@
-import {
-  SESSION_LOADING,
-  SESSION_RESTORING,
-  SESSION_SUCCESS,
-  SESSION_LOGOUT,
-  SESSION_ERROR,
-  SIGNUP_SUCCESS
-} from "./actionTypes";
-import firebase from "../../config/firebase";
+import { AsyncStorage } from "react-native";
+import { AUTHENTICATE, LOGOUT } from "./actionTypes";
 
-export const restoreSession = () => dispatch => {
-  dispatch(sessionLoading());
-  dispatch(sessionRestoring());
+let timer;
 
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      dispatch(sessionSuccess(user));
-    } else {
-      dispatch(sessionLogout());
+// Been told the rest api is better
+export const authenticate = (userId, token, expiryTime) => {
+  return dispatch => {
+    dispatch(setLogoutTimer(expiryTime));
+    dispatch({ type: AUTHENTICATE, userId, token });
+  };
+};
+
+export const signup = (email, password) => {
+  return async dispatch => {
+    const response = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAzxUEyYEP5Vf7a3SzzHQe-nLRdYmupmQk",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          returnSecureToken: true
+        })
+      }
+    );
+
+    if (!response.ok) {
+      const errorResData = await response.json();
+      const errorId = errorResData.error.message;
+      let message = "Something went wrong!";
+      if (errorId === "EMAIL_EXISTS") {
+        message = "This email exists already!";
+      }
+      throw new Error(message);
     }
-  });
+
+    const resData = await response.json();
+    console.log(resData);
+    dispatch(
+      authenticate(
+        resData.localId,
+        resData.idToken,
+        parseInt(resData.expiresIn) * 1000
+      )
+    );
+    const expirationDate = new Date(
+      new Date().getTime() + parseInt(resData.expiresIn) * 1000
+    );
+    saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+  };
 };
 
-export const loginUser = auth => dispatch => {
-  dispatch(sessionLoading());
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(auth.email, auth.password)
-    .then(user => {
-      dispatch(sessionSuccess(user));
+export const login = (email, password) => {
+  return async dispatch => {
+    console.log(email, password);
+    const response = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAzxUEyYEP5Vf7a3SzzHQe-nLRdYmupmQk",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          returnSecureToken: true
+        })
+      }
+    );
+
+    if (!response.ok) {
+      const errorResData = await response.json();
+      const errorId = errorResData.error.message;
+      let message = "Something went wrong!";
+      if (errorId === "EMAIL_NOT_FOUND") {
+        message = "This email could not be found!";
+      } else if (errorId === "INVALID_PASSWORD") {
+        message = "This password is not valid!";
+      }
+      throw new Error(message);
+    }
+
+    const resData = await response.json();
+    console.log(resData);
+    dispatch(
+      authenticate(
+        resData.localId,
+        resData.idToken,
+        parseInt(resData.expiresIn) * 1000
+      )
+    );
+    // yeah no idea
+    const expirationDate = new Date(
+      new Date().getTime() + parseInt(resData.expiresIn) * 1000
+    );
+    saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+  };
+};
+
+export const logout = () => {
+  clearLogoutTimer();
+  AsyncStorage.removeItem("userData");
+  return { type: LOGOUT };
+};
+
+const clearLogoutTimer = () => {
+  if (timer) {
+    clearTimeout(timer);
+  }
+};
+
+const setLogoutTimer = expirationTime => {
+  return dispatch => {
+    timer = setTimeout(() => {
+      dispatch(logout());
+    }, expirationTime);
+  };
+};
+
+// ahhhhhhhhhhhhhhhhh
+const saveDataToStorage = (token, userId, expirationDate) => {
+  AsyncStorage.setItem(
+    "userData",
+    JSON.stringify({
+      token,
+      userId,
+      expiryDate: expirationDate.toISOString()
     })
-    .catch(error => {
-      dispatch(sessionError(error.message));
-    });
+  );
 };
-
-export const signupUser = auth => dispatch => {
-  dispatch(sessionLoading());
-  firebase
-    .auth()
-    .createUserWithEmailAndPassword(auth.email, auth.password)
-    .then(user => {
-      dispatch(signupSuccess(user));
-    })
-    .catch(error => {
-      dispatch(sessionError(error.message));
-    });
-};
-
-export const logoutUser = () => dispatch => {
-  dispatch(sessionLoading());
-
-  firebase
-    .auth()
-    .signOut()
-    .then(() => {
-      dispatch(sessionLogout());
-    })
-    .catch(error => {
-      dispatch(sessionError(error.message));
-    });
-};
-
-const sessionRestoring = () => ({
-  type: SESSION_RESTORING
-});
-
-const sessionLoading = () => ({
-  type: SESSION_LOADING
-});
-
-const sessionSuccess = user => ({
-  type: SESSION_SUCCESS,
-  user
-});
-
-const signupSuccess = user => ({
-  type: SIGNUP_SUCCESS,
-  user
-});
-
-const sessionError = error => ({
-  type: SESSION_ERROR,
-  error
-});
-
-const sessionLogout = () => ({
-  type: SESSION_LOGOUT
-});

@@ -1,10 +1,10 @@
 import React from "react";
-import { TouchableOpacity, Slider } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { setRadius } from "../store/actions/radius";
 //Custom slider im workig on
-// import Slider from "../components/map/slider"
+import Slider from "../components/map/slider";
 
 const MAX_RADIUS = 20;
 // for some reason firebase gets all data if is 0 ??????
@@ -19,12 +19,13 @@ class ModalScreen extends React.Component {
     this.props.setRadius(this.props.radius);
   }
 
-  updateRadius = val => {
+  updateRadius = (val) => {
     this.props.setRadius(val);
-  };
+  }
+  
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, radius } = this.props;
 
     return (
       <TouchableOpacity
@@ -35,15 +36,7 @@ class ModalScreen extends React.Component {
           backgroundColor: "#00000080"
         }}
       >
-        <Slider
-          value={this.props.radius}
-          minimumValue={MIN_RADIUS}
-          maximumValue={MAX_RADIUS}
-          step={5}
-          onValueChange={val => {
-            this.updateRadius(val);
-          }}
-        />
+        <Slider sendData={this.updateRadius}/>
       </TouchableOpacity>
     );
   }

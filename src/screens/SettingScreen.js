@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { setRadius } from "../store/actions/radius";
 import { setNotifications, removeNotifications } from "../store/actions/switch";
-import { logoutUser } from "../store/actions/auth";
+import { logout } from "../store/actions/auth";
 import { func } from "../constants/index";
 import store from "../store/configStore";
 import { getParks } from "../store/actions/notification";
@@ -106,7 +106,7 @@ class Setting extends React.Component {
   };
 
   LogOut = () => {
-    this.props.logoutUser();
+    this.props.logout();
     this.props.navigation.navigate("Auth");
   };
 
@@ -159,7 +159,7 @@ function mapDispatchToProps(dispatch) {
       setRadius: setRadius,
       setNotifications: setNotifications,
       removeNotifications: removeNotifications,
-      logoutUser: logoutUser
+      logout: logout
     },
     dispatch
   );
