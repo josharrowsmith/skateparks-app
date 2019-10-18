@@ -115,6 +115,7 @@ export default class Markers extends Component {
   render() {
     const { location, markers, showCards, navigation } = this.props;
     const { index, pressed } = this.state;
+    console.log("called");
 
     return (
       <>
@@ -124,22 +125,22 @@ export default class Markers extends Component {
           initialRegion={{
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.1
+            latitudeDelta: 0.5,
+            longitudeDelta: 0.5
           }}
         >
           <CurrentLocation location={location} />
           <Markerss markers={markers} animation={this.animation} />
         </MapView>
         <CenterLocation pressed={this.toggleAction} />
-        {showCards && (
+        {/* {showCards && (
           <Cards
             markers={markers}
             animation={this.animation}
             index={index}
             navigation={navigation}
           />
-        )}
+        )} */}
       </>
     );
   }

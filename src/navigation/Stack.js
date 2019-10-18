@@ -60,7 +60,7 @@ const AuthNavigator = createStackNavigator(
 );
 
 const RootNavigator = createSwitchNavigator({
-  Auth: AuthNavigator,
+  // Auth: AuthNavigator,
   Main: MainNavigator
 });
 

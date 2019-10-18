@@ -6,17 +6,17 @@ Find a skatepark near you !
 
 # Auth 
 
-- [ ] Sign Up
-- [ ] Login
+- [X] Sign Up
+- [X] Login
 - [ ] Add users to map 
 
 # UI 
 
-- [ ] Remake Nav to look better
+- [X] Remake Nav to look better
 - [ ] Bottom sheet thing
-- [ ] Slider for radius in Modal page
+- [X] Slider for radius in Modal page
 - [ ] Slider for radius in Setting page
-- [ ] Add navigation transitions 
+- [X] Add navigation transitions 
 - [ ] Add bubble navigation transition
 - [ ] Style map 
 - [ ] Make marker icons and animations
@@ -26,7 +26,7 @@ Find a skatepark near you !
 # Database 
 
 - [ ] Fix Size issue for photos 
-- [ ] Add multiple photos to skatepark
+- [X] Add multiple photos to skatepark
 - [ ] Connect auth and skatepark 
 - [ ] Resize images cloud function 
 - [ ] Add end points for adding a skatepark 
@@ -35,7 +35,7 @@ Find a skatepark near you !
 
 # Navigation
 
-- [ ] Make new stack for auth
+- [X] Make new stack for auth
 
 # Other features 
 
@@ -49,3 +49,8 @@ Find a skatepark near you !
 - [ ] everything on ios ahahahahahha
 - [ ] notifications on ios 
 - [ ] firestore doc has changed issue
+
+# Rebuild 
+- [ ] need to rebuild for expo 35 
+- [ ] hook man hooks !
+- [ ] dropping frames everywhere :(

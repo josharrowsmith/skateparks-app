@@ -2,69 +2,52 @@ import React from "react";
 import {
   Text,
   View,
-  Animated,
   Image,
   TouchableOpacity,
   StyleSheet,
   Linking
 } from "react-native";
 import { device } from "../../constants";
-import Card from "./card";
-import Loading from "../home/loading";
 
-export default class Cards extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.goToIndex();
-    }, 1000);
-  }
-
-  goToIndex() {
-    const { index } = this.props;
-    if (this.scroll) {
-      this.scroll
-        .getNode()
-        .scrollTo({ x: index * device.cardWidth, y: 0, animated: true });
-    }
-  }
-
-  render() {
-    const { animation, markers, navigation } = this.props;
-    return (
-      <Animated.ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={device.cardWidth}
-        ref={c => {
-          this.scroll = c;
-        }}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: {
-                  x: animation
-                }
-              }
-            }
-          ],
-          { useNativeDriver: true }
-        )}
-        style={styles.scrollView}
-        contentContainerStyle={styles.endPadding}
-      >
-        {markers.map(marker => (
-          <Card marker={marker} />
-        ))}
-      </Animated.ScrollView>
-    );
-  }
-}
+const Card = ({ marker, navigation }) => (
+  <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.longPress}
+      onLongPress={() =>
+        navigation.navigate("Marker", {
+          marker
+        })
+      }
+    >
+      <Image
+        source={{ uri: marker.image[0] }}
+        style={styles.cardImage}
+        resizeMode="cover"
+      />
+    </TouchableOpacity>
+    <View style={styles.distance}>
+      <Text style={styles.distanceText}>
+        {marker.distance.toFixed(2) + "kms"}
+      </Text>
+    </View>
+    <View style={styles.container}>
+      <Text style={styles.cardtitle}>{marker.name}</Text>
+      <View style={styles.textContent}>
+        <Text>Rating</Text>
+        <TouchableOpacity
+          style={styles.mapbtn}
+          onPress={() =>
+            Linking.openURL(
+              `google.navigation:q=${marker.coordinates._lat}+${marker.coordinates._long}`
+            )
+          }
+        >
+          <Text style={styles.mapText}>Maps</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+);
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -150,3 +133,5 @@ const styles = StyleSheet.create({
     alignContent: "center"
   }
 });
+
+export default Card;
