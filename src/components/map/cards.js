@@ -59,7 +59,7 @@ export default class Cards extends React.Component {
         contentContainerStyle={styles.endPadding}
       >
         {markers.map(marker => (
-          <Card marker={marker} />
+          <Card marker={marker} navigation={navigation} />
         ))}
       </Animated.ScrollView>
     );

@@ -133,14 +133,14 @@ export default class Markers extends Component {
           <Markerss markers={markers} animation={this.animation} />
         </MapView>
         <CenterLocation pressed={this.toggleAction} />
-        {/* {showCards && (
+        {showCards && (
           <Cards
             markers={markers}
             animation={this.animation}
             index={index}
             navigation={navigation}
           />
-        )} */}
+        )}
       </>
     );
   }
