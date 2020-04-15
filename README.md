@@ -54,3 +54,5 @@ Find a skatepark near you !
 - [ ] need to rebuild for expo 35 
 - [ ] hook man hooks !
 - [ ] dropping frames everywhere :(
+
+new branch 
