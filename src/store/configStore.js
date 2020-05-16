@@ -1,12 +1,15 @@
+import { AsyncStorage } from "react-native";
 import { combineReducers, compose, createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import RadiusReducer from "./reducers/radius";
-import SwitchReducer from "./reducers/switch";
-import AuthReducer from "./reducers/auth";
+import PlacesReducer from "./reducers/places"
+import themeReducer from "./reducers/theme"
+import AuthReducer from "./reducers/auth"
 
 const rootReducer = combineReducers({
   radius: RadiusReducer,
-  notification: SwitchReducer,
+  places: PlacesReducer,
+  theme: themeReducer,
   auth: AuthReducer
 });
 
@@ -20,5 +23,8 @@ const store = createStore(
   rootReducer,
   composeEnhancers(applyMiddleware(thunk))
 );
+
+
+
 
 export default store;

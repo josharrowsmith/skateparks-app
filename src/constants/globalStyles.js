@@ -1,40 +1,30 @@
-import colors from "./colors";
+import styled, { ThemeProvider } from "styled-components";
 
-// utility styles
-// /////////////////////////////////////////////////////////////////////////////
-export default {
-  btn: {
-    alignItems: "center",
-    backgroundColor: colors.brandPrimary,
-    borderColor: colors.brandPrimary,
-    borderWidth: 1,
-    borderRadius: 4,
-    height: 48,
-    justifyContent: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 8
-  },
-  btnText: {
-    color: colors.white,
-    textAlign: "center"
-  },
-  container: {
-    backgroundColor: colors.white,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  contentContainer: {
-    alignItems: "center",
-    paddingTop: 32
-  },
-  activeO: 0.8,
-  activeOFull: 1,
-  spacer80: {
-    height: 80,
-    width: "100%"
-  },
-  text: {
-    color: colors.brandPrimary
-  }
-};
+export const Bg = styled.View`
+  flex: 1;
+  background-color: ${props => props.theme.body};
+  justify-content: center;
+  align-items: center;
+`;
+
+export const SmallFont = styled.Text`
+  color: ${props => props.theme.text};
+  fontSize: 20px;
+`
+
+export const SmallFontInv = styled.Text`
+  color: ${props => props.theme.body};
+  fontSize: 20px;
+`
+export const Title = styled.Text`
+  color: ${props => props.theme.text};
+  fontSize: 26px;
+`
+export const Btn = styled.TouchableOpacity`
+  background-color: ${(props) => props.theme.text};
+  borderRadius: 30px;
+  justifyContent: center;
+  display: flex;
+  alignItems: center;
+  padding: 3px 15px;
+`;

@@ -2,20 +2,19 @@ import React from "react";
 import { AppLoading } from "expo";
 import { Provider } from "react-redux";
 import { func } from "./src/constants";
-import Stack from "./src/navigation/Stack";
+import AppNavigator from "./src/navigation/AppNavigator";
 import store from "./src/store/configStore";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       isLoading: true
     };
   }
-
   render() {
     const { isLoading } = this.state;
+    console.ignoredYellowBox = ['Setting a timer'];
 
     if (isLoading) {
       return (
@@ -28,7 +27,7 @@ class App extends React.Component {
 
     return (
       <Provider store={store}>
-        <Stack />
+        <AppNavigator />
       </Provider>
     );
   }
