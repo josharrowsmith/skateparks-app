@@ -3,6 +3,12 @@
 Find a skatepark near you !
 
 ![Alt Text](./screenshots/startup.png)
+![Alt Text](./screenshots/login.png)
+![Alt Text](./screenshots/cards.png)
+![Alt Text](./screenshots/park.png)
+![Alt Text](./screenshots/radius.png)
+![Alt Text](./screenshots/setting2.png)
+![Alt Text](./screenshots/darkmode2.png)
 
 # Todo
 
@@ -24,7 +30,7 @@ Find a skatepark near you !
 # Database 
 
 - [X] Fix Size issue for photos 
-- [C] Add multiple photos to skatepark
+- [X] Add multiple photos to skatepark
 - [X] Connect auth and skatepark 
 - [X] Resize images cloud function 
 - [ ] Add end points for adding a skatepark 
