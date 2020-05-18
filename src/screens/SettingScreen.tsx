@@ -15,7 +15,11 @@ import {
   Description,
 } from "../constants/globalStyles";
 import styled, { ThemeProvider } from "styled-components";
-import { Msg } from "../store/actions/notification";
+import {
+  Msg,
+  EnabledNotifcation,
+  DiableNotifcation,
+} from "../store/actions/notification";
 import BackBtn from "../components/settings/BackBtn";
 import Grid from "../components/settings/Grid";
 import SettingContainer from "../components/settings/SettingContainer";
@@ -24,6 +28,10 @@ import SettingRow from "../components/settings/SettingRow";
 import { Toggle } from "../components/settings/toggle";
 import { useNavigation } from "@react-navigation/native";
 import Accordion from "../components/settings/accordion";
+import { Notifications } from "expo";
+import firebase from "../config/firebase";
+
+const db = firebase.firestore();
 
 const BACKGROUND_LOCATION_TASK_NAME = "bg-location-name";
 
@@ -34,6 +42,7 @@ const SettingScreen = () => {
   const [currentTheme, setTheme] = useState(false);
   const [currentThing, setThing] = useState(false);
   const [currentNofication, setNofication] = useState(false);
+  const location = useSelector((state) => state.location);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -60,17 +69,23 @@ const SettingScreen = () => {
     setThing(state);
   }
 
+  // Android needs a sticky nofication for reasons ....
   async function enabled() {
     await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK_NAME, {
       accuracy: Location.Accuracy.Highest,
-      distanceInterval: 5000,
-      timeInterval: 0,
+      distanceInterval: 0,
+      timeInterval: 30000,
       showsBackgroundLocationIndicator: true,
+      foregroundService: {
+        notificationTitle: "location tracking",
+        notificationBody: "Notification Body",
+      },
     });
   }
 
   async function disable() {
     await Location.stopLocationUpdatesAsync(BACKGROUND_LOCATION_TASK_NAME);
+    Notifications.dismissAllNotificationsAsync();
   }
 
   return (
@@ -144,6 +159,12 @@ if (!TaskManager.isTaskDefined(BACKGROUND_LOCATION_TASK_NAME)) {
         const transformedData2 = JSON.parse(storageRadius);
         const radius = 5;
         Msg(radius, locations, userId);
+        // Need this if using the cloud functions 
+        // db.collection("users")
+        //   .doc(userId)
+        //   .update({
+        //     location: locations,
+        //   });
       }
     }
   );

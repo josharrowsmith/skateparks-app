@@ -1,16 +1,40 @@
 /* eslint-disable */
 import firebase from "../../config/firebase";
 import { GeoFirestore } from "geofirestore";
-
+const db = firebase.firestore();
 
 export const Msg = async (radius, location, userId) => {
   console.disableYellowBox = true;
-  const db = firebase.firestore();
   let tokens = [];
   const token = await db.collection("users").doc(userId).get().then(snapshot => {
     return snapshot.data().notificationToken;
   })
   getTheParks(radius, location, token);
+}
+
+export const EnabledNotifcation = (getState) => {
+  return async (dispatch, getState) => {
+    // any async code you want!
+    const userId = getState().auth.userId;
+    const email = getState().auth.email;
+    const location = getState().location;
+    db.collection('users').doc(userId).update({
+      enabled: true,
+      ...location
+    })
+  }
+}
+
+export const DiableNotifcation = (getState) => {
+  return async (dispatch, getState) => {
+    // any async code you want!
+    const userId = getState().auth.userId;
+    const email = getState().auth.email
+    db.collection('users').doc(userId).update({
+      enabled: false,
+      location: null
+    })
+  }
 }
 
 

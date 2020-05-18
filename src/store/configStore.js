@@ -5,12 +5,14 @@ import RadiusReducer from "./reducers/radius";
 import PlacesReducer from "./reducers/places"
 import themeReducer from "./reducers/theme"
 import AuthReducer from "./reducers/auth"
+import locationReducer from "./reducers/location"
 
 const rootReducer = combineReducers({
   radius: RadiusReducer,
   places: PlacesReducer,
   theme: themeReducer,
-  auth: AuthReducer
+  auth: AuthReducer,
+  location: locationReducer
 });
 
 let composeEnhancers = compose;
