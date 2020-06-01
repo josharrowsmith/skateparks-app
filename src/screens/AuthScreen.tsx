@@ -22,6 +22,7 @@ import {
 } from "../components/auth/BtnContainer";
 import styled, { ThemeProvider } from "styled-components";
 import * as Google from "expo-google-app-auth";
+import GoogleIcon from "../assets/icons/Google";
 import { ANDROID } from "react-native-dotenv";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
