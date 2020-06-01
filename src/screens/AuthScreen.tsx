@@ -17,6 +17,8 @@ import {
   BtnText,
   SwitchText,
   AuthTitle,
+  GoogleBtn,
+  GoogleText,
 } from "../components/auth/BtnContainer";
 import styled, { ThemeProvider } from "styled-components";
 import * as Google from "expo-google-app-auth";
@@ -112,8 +114,7 @@ const AuthScreen = (props) => {
       });
 
       if (result.type === "success") {
-        dispatch(authActions.onSignIn(result));
-        return result.accessToken;
+        dispatch(authActions.onSignIn(result.idToken, result.accessToken));
       } else {
         return { cancelled: true };
       }
@@ -178,6 +179,11 @@ const AuthScreen = (props) => {
             </ScrollView>
           </AuthTextBox>
         </KeyboardAvoidingView>
+        <GoogleBtn onPress={signInWithGoogleAsync}>
+          1
+          <GoogleIcon />
+          <GoogleText>Sign in with Google</GoogleText>
+        </GoogleBtn>
       </AuthContainer>
     </ThemeProvider>
   );

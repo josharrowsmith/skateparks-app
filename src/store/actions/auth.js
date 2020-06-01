@@ -107,37 +107,31 @@ export const login = (email, password) => {
     };
 };
 
-// From Docs unsure ...
-const isUserEqual = (googleUser, firebaseUser) => {
-    if (firebaseUser) {
-        var providerData = firebaseUser.providerData;
-        for (var i = 0; i < providerData.length; i++) {
-            if (
-                providerData[i].providerId ===
-                firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-                providerData[i].uid === googleUser.getBasicProfile().getId()
-            ) {
-                // We don't need to reauth the Firebase connection.
-                return true;
-            }
-        }
-    }
-    return false;
-};
 
 // Google Sign 
-export const onSignIn = (googleUser) => {
+export const onSignIn = (idToken, accessToken) => {
     return async dispatch => {
-        var credential = firebase.auth.GoogleAuthProvider.credential(
-            googleUser.idToken,
-            googleUser.accessToken
+        const credential = firebase.auth.GoogleAuthProvider.credential(
+            idToken,
+            accessToken
         );
         // Sign in with credential from the Google user.
         firebase
             .auth()
             .signInAndRetrieveDataWithCredential(credential)
-            .then(function (result) {
-                console.log("user signed in ", result);
+            .then(function (response) {
+                dispatch(
+                    authenticate(
+                        response.user.uid,
+                        idToken,
+                        parseInt(7889400000) * 1000,
+                        response.user.email,
+                    )
+                );
+                const expirationDate = new Date(
+                    new Date().getTime() + parseInt(7889400000) * 1000
+                );
+                saveDataToStorage(idToken, response.user.uid, expirationDate, response.user.email);
             })
             .catch(function (error) {
                 console.log(error)
