@@ -11,6 +11,7 @@ import Markers from "./MarkersScreen";
 import Nav from "../components/home/nav";
 import { useSelector, useDispatch } from "react-redux";
 import { getParks } from "../store/actions/parks";
+import { setLocation } from "../store/actions/location";
 import { notificationToken } from "../store/actions/auth";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../constants/theme";
@@ -51,6 +52,7 @@ const Main = ({ navigation }: IState) => {
               latitudeDelta: 0.04,
               longitudeDelta: 0.04,
             });
+            dispatch(setLocation(latitude, longitude))
             dispatch(getParks(radius, latitude, longitude));
           }
         );

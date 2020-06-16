@@ -45,7 +45,7 @@ Find a skatepark near you !
 # Other features 
 
 - [ ] Search 
-- [ ] Change location with drag 
+- [X] Change location with drag 
 - [ ] Add typescript dude
 - [X] Dark mode never not dark mode
 

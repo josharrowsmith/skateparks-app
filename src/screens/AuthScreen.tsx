@@ -181,7 +181,6 @@ const AuthScreen = (props) => {
           </AuthTextBox>
         </KeyboardAvoidingView>
         <GoogleBtn onPress={signInWithGoogleAsync}>
-          1
           <GoogleIcon />
           <GoogleText>Sign in with Google</GoogleText>
         </GoogleBtn>

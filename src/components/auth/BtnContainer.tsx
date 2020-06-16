@@ -13,36 +13,19 @@ export const AuthTextBox = styled.View`
   width: ${device.width - 20}px;
 `;
 
-export const GoogleBtn = styled.TouchableOpacity`
-  background-color: ${(props) => props.theme.body};
-  border: 1px solid #eeeeee;
-  border-radius: 30px;
-  display: flex;
-  flexdirection: row;
-  alignitems: center;
-  padding: 10px;
-  max-width: 300px;
-`;
-
-export const GoogleText = styled.Text`
-  color: ${(props) => props.theme.text};
-  fontsize: 20px;
-  margin: 0 10px;
-`;
-
 export const Container = styled.View`
   display: flex;
-  justifycontent: space-between;
-  flexdirection: row;
+  justifyContent: space-between;
+  flexDirection: row;
   padding: 25px 0;
 `;
 
 export const NextBtn = styled.TouchableOpacity`
   background-color: ${(props) => props.theme.text};
-  borderradius: 30px;
-  justifycontent: center;
+  borderRadius: 30px;
+  justifyContent: center;
   display: flex;
-  alignitems: center;
+  alignItems: center;
   padding: 3px 15px;
 `;
 
@@ -52,18 +35,35 @@ export const SwitchBtn = styled.TouchableOpacity`
 
 export const BtnText = styled.Text`
   color: ${(props) => props.theme.body};
-  fontsize: 20px;
+  fontSize: 20px;
+`;
+
+export const GoogleBtn = styled.TouchableOpacity`
+  background-color: ${(props) => props.theme.body};
+  border : 1px solid #eeeeee;
+  border-radius: 30px;
+  display: flex;
+  flexDirection: row;
+  alignItems: center;
+  padding: 10px;
+  max-width: 300px;
+`;
+
+export const GoogleText = styled.Text`
+  color: ${(props) => props.theme.text};
+  fontSize: 20px;
+  margin: 0 10px;
 `;
 
 export const SwitchText = styled.Text`
   color: ${(props) => props.theme.text};
-  fontsize: 20px;
-  alignitems: center;
+  fontSize: 20px;
+  alignItems: center;
   padding: 3px 0;
 `;
 
 export const AuthTitle = styled.Text`
-  color: ${(props) => props.theme.text};
-  fontsize: 32px;
+  color: ${props => props.theme.text};
+  fontSize: 32px;
   padding: 15px 0;
-`;
+`

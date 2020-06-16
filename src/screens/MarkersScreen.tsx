@@ -19,6 +19,7 @@ interface IState {
   isToggled: boolean;
   theme: any;
   navigation: any;
+  locaiton: any;
 }
 
 class Markers extends React.PureComponent<IState> {
@@ -55,7 +56,7 @@ class Markers extends React.PureComponent<IState> {
             latitude: _lat,
             longitude: _long,
             latitudeDelta: 0.1,
-            longitudeDelta: 0.1
+            longitudeDelta: 0.1,
           },
           500
         );
@@ -65,12 +66,12 @@ class Markers extends React.PureComponent<IState> {
   };
 
   toggleCenter = async () => {
-    const { currentRegion } = this.props;
+    const { currentRegion, location } = this.props;
     const { latitudeDelta, longitudeDelta } = this.state;
     this.map.animateToRegion(
       {
-        latitude: currentRegion.latitude,
-        longitude: currentRegion.longitude,
+        latitude: location.latitude,
+        longitude: location.longitude,
         latitudeDelta: latitudeDelta,
         longitudeDelta: longitudeDelta,
       },
@@ -136,24 +137,20 @@ class Markers extends React.PureComponent<IState> {
 
     return (
       <>
-        {!parks.length && radius !== 0.1 ? (
-          <Loading />
-        ) : (
-          <MapView
-            ref={(map) => (this.map = map)}
-            style={{ alignSelf: "stretch", flex: 1, marginTop: -100 }}
-            customMapStyle={theme.mode ? DarkMap : LightMap}
-            initialRegion={{
-              latitude: currentRegion.latitude,
-              longitude: currentRegion.longitude,
-              latitudeDelta: 0.4,
-              longitudeDelta: 0.4,
-            }}
-          >
-            <CurrentLocation currentRegion={currentRegion} />
-            <Marker {...{ parks, x }} />
-          </MapView>
-        )}
+        <MapView
+          ref={(map) => (this.map = map)}
+          style={{ alignSelf: "stretch", flex: 1, marginTop: -100 }}
+          customMapStyle={theme.mode ? DarkMap : LightMap}
+          initialRegion={{
+            latitude: currentRegion.latitude,
+            longitude: currentRegion.longitude,
+            latitudeDelta: 0.4,
+            longitudeDelta: 0.4,
+          }}
+        >
+          <CurrentLocation currentRegion={currentRegion} />
+          <Marker {...{ parks, x }} />
+        </MapView>
         <CenterLocation pressed={this.toggleCenter} {...{ theme }} />
         {isToggled && (
           <Cards
@@ -168,4 +165,10 @@ class Markers extends React.PureComponent<IState> {
   }
 }
 
-export default Markers;
+const mapStateToProps = (state) => {
+  return {
+    location: state.location.location,
+  };
+};
+
+export default connect(mapStateToProps, null)(Markers);
