@@ -14,7 +14,7 @@ export const setDidTryAL = () => {
 export const authenticate = (userId, token, expiryTime, email) => {
     return dispatch => {
         dispatch(setLogoutTimer(expiryTime));
-        dispatch({ type: AUTHENTICATE, userId: userId, token: token, email: email });
+        dispatch({ type: AUTHENTICATE, userId: userId, token: token, email: email, admin: false });
     };
 };
 
@@ -91,22 +91,45 @@ export const login = (email, password) => {
         }
 
         const resData = await response.json();
-        console.log(resData)
         dispatch(
             authenticate(
                 resData.localId,
                 resData.idToken,
-                parseInt(resData.expiresIn) * 1000,
-                email,
+                parseInt(7 * 1000 * 3600 * 24),
+                email
             )
         );
         const expirationDate = new Date(
-            new Date().getTime() + parseInt(resData.expiresIn) * 1000
+            new Date().getTime() + parseInt(7 * 1000 * 3600 * 24)
         );
         saveDataToStorage(resData.idToken, resData.localId, expirationDate, email);
     };
 };
 
+
+export const checkIfAdmin = (token) => {
+    return async dispatch => {
+        const response = await fetch(
+            `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    idToken: token
+                })
+            }
+        )
+        if (!response.ok) {
+            const errorResData = await response.json();
+            console.log(errorResData)
+        }
+        const resData = await response.json();
+        const result = resData.users[0].customAttributes;
+        return result;
+    };
+}
 
 // Google Sign 
 export const onSignIn = (idToken, accessToken) => {
@@ -120,6 +143,7 @@ export const onSignIn = (idToken, accessToken) => {
             .auth()
             .signInAndRetrieveDataWithCredential(credential)
             .then(function (response) {
+
                 dispatch(
                     authenticate(
                         response.user.uid,
@@ -210,7 +234,6 @@ export const notificationToken = (token, getState) => {
         // any async code you want!
         const userId = getState().auth.userId;
         const email = getState().auth.email
-        console.log(userId, email)
         db.collection('users').doc(userId).set({
             notificationToken: token,
             name: email

@@ -13,7 +13,8 @@ export default (state = initialState, action) => {
                 token: action.token,
                 userId: action.userId,
                 email: action.email,
-                didTryAutoLogin: true
+                didTryAutoLogin: true,
+                admin: action.admin
             };
         case SET_DID_TRY_AL:
             return {

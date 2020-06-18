@@ -15,6 +15,7 @@ import { setLocation } from "../store/actions/location";
 import { notificationToken } from "../store/actions/auth";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../constants/theme";
+import { checkIfAdmin } from "../store/actions/auth";
 
 interface IState {
   location: object;
@@ -31,6 +32,7 @@ const Main = ({ navigation }: IState) => {
   const theme = useSelector((state) => state.theme);
   const radius = useSelector((state) => state.radius.radius);
   const parks = useSelector((state) => state.places.places);
+  const localauth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const toggleTrueFalse = (val) => setToggled(val);
@@ -52,7 +54,7 @@ const Main = ({ navigation }: IState) => {
               latitudeDelta: 0.04,
               longitudeDelta: 0.04,
             });
-            dispatch(setLocation(latitude, longitude))
+            dispatch(setLocation(latitude, longitude));
             dispatch(getParks(radius, latitude, longitude));
           }
         );
@@ -91,6 +93,15 @@ const Main = ({ navigation }: IState) => {
       });
     }
   }
+
+  useEffect(() => {
+    async function checkAdmin() {
+      const result = await dispatch(checkIfAdmin(localauth.token));
+      const isAdmin = await JSON.parse(result);
+      localauth.admin = await isAdmin.admin;
+    }
+    checkAdmin();
+  }, [localauth]);
 
   if (!currentRegion) {
     return null;

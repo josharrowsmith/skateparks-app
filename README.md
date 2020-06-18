@@ -13,7 +13,7 @@ Find a skatepark near you !
 # Todo
 
 # Auth 
-- [ ] Make admin accounts because my friends are assholes
+- [X] Make admin accounts because my friends are assholes
 - [ ] Add users to map 
 - [ ] Auth0 or mint token ?
 - [ ] Fix Goggle auth and Apple 
@@ -38,7 +38,7 @@ Find a skatepark near you !
 - [ ] rating system 
 - [ ] Cloud function for everything !!
 - [X] daily nofication via cloud funtion
-- [ ] Admin accounts
+- [X] Admin accounts
 
 # Navigation
 
