@@ -12,48 +12,49 @@ Find a skatepark near you !
 
 # Todo
 
-# Auth 
-- [X] Make admin accounts because my friends are assholes
-- [ ] Add users to map 
+# Auth
+
+- [x] Make admin accounts because my friends are assholes
+- [ ] Add users to map
 - [ ] Auth0 or mint token ?
-- [ ] Fix Goggle auth and Apple 
+- [ ] Fix Goggle auth and Apple
 
-# UI 
+# UI
 
-- [X] Remake Nav to look better
-- [ ] Re-design Slider in radius page 
+- [x] Remake Nav to look better
+- [ ] Re-design Slider in radius page
 - [ ] Slider for radius in Setting page
-- [ ] Add navigation transitions 
-- [X] Style map 
-- [X] Make marker icons and animations
-- [X] Make center location icon
+- [ ] Add navigation transitions
+- [x] Style map
+- [x] Make marker icons and animations
+- [x] Make center location icon
 
-# Database 
+# Database
 
-- [X] Fix Size issue for photos 
-- [X] Add multiple photos to skatepark
-- [X] Connect auth and skatepark 
-- [X] Resize images cloud function 
-- [ ] Add end points for adding a skatepark 
-- [ ] rating system 
+- [x] Fix Size issue for photos
+- [x] Add multiple photos to skatepark
+- [x] Connect auth and skatepark
+- [x] Resize images cloud function
+- [ ] Add end points for adding a skatepark
+- [x] rating system
 - [ ] Cloud function for everything !!
-- [X] daily nofication via cloud funtion
-- [X] Admin accounts
+- [x] daily nofication via cloud funtion
+- [x] Admin accounts
 
 # Navigation
 
 - [ ] Animations
 
-# Other features 
+# Other features
 
-- [ ] Search 
-- [X] Change location with drag 
+- [ ] Search
+- [x] Change location with drag
 - [ ] Add typescript dude
-- [X] Dark mode never not dark mode
+- [x] Dark mode never not dark mode
 
-# Bugs 
+# Bugs
 
 - [ ] everything on ios ahahahahahha
-- [ ] notifications on ios 
-- [ ] firestore doc has changed issue
+- [ ] notifications on ios
+- [x] firestore doc has changed issue
 - [ ] backgorund Nofication bugs

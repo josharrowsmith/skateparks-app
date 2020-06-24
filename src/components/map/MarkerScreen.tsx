@@ -13,10 +13,13 @@ import { lightTheme, darkTheme } from "../../constants/theme";
 import { Bg, Btn, SmallFontInv } from "../../constants/globalStyles";
 import styled, { ThemeProvider } from "styled-components";
 import { device } from "../../constants";
+import { useSelector, useDispatch } from "react-redux";
+import { addRating, getParks } from "../../store/actions/parks";
 import Stars from "react-native-stars";
 
 interface Iprops {
   parks: any;
+  update: any;
 }
 
 const Container = styled.View`
@@ -68,7 +71,12 @@ const BackBtn = styled.Text`
 export default ({ route, navigation }) => {
   const { park } = route.params;
   const { theme } = route.params;
+
   const [isLoading, setLoading] = useState(true);
+  const localauth = useSelector((state) => state.auth);
+  const location = useSelector((state) => state.location.location);
+  const radius = useSelector((state) => state.radius.radius);
+  const dispatch = useDispatch();
   return (
     <>
       <ThemeProvider theme={theme.mode === false ? lightTheme : darkTheme}>
@@ -78,7 +86,7 @@ export default ({ route, navigation }) => {
             style={{ flex: 1 }}
             snapToInterval={device.width}
           >
-            {park.images.map((item, index) => {
+            {park.image.map((item, index) => {
               return (
                 <Image
                   key={item.toString()}
@@ -96,12 +104,21 @@ export default ({ route, navigation }) => {
             <ParkTitle>{park.name}</ParkTitle>
             <TitleContainer>
               <Stars
-                disabled
                 half={true}
-                default={park.rating}
+                default={park.avgRating}
                 spacing={5}
                 starSize={20}
                 count={5}
+                update={(val) => {
+                  dispatch(addRating(park.id, val, localauth.email));
+                  // Fix this later
+                  setTimeout(() => {
+                    dispatch(
+                      getParks(radius, location.latitude, location.longitude)
+                    );
+                    navigation.goBack();
+                  }, 2000);
+                }}
                 fullStar={require("../../assets/starFilled.png")}
                 emptyStar={require("../../assets/starEmpty.png")}
                 halfStar={require("../../assets/starHalf.png")}
