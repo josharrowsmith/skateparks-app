@@ -70,7 +70,7 @@ class Markers extends React.PureComponent<IState> {
     const { latitudeDelta, longitudeDelta } = this.state;
     this.map.animateToRegion(
       {
-        latitude: location.latitude,
+        latitude: location.latitude, 
         longitude: location.longitude,
         latitudeDelta: latitudeDelta,
         longitudeDelta: longitudeDelta,
@@ -133,6 +133,7 @@ class Markers extends React.PureComponent<IState> {
       theme,
       navigation,
       radius,
+      auth
     } = this.props;
 
     return (
@@ -149,7 +150,7 @@ class Markers extends React.PureComponent<IState> {
           }}
         >
           <CurrentLocation currentRegion={currentRegion} />
-          <Marker {...{ parks, x }} />
+          <Marker {...{ parks, x, auth }} />
         </MapView>
         <CenterLocation pressed={this.toggleCenter} {...{ theme }} />
         {isToggled && (
@@ -168,6 +169,7 @@ class Markers extends React.PureComponent<IState> {
 const mapStateToProps = (state) => {
   return {
     location: state.location.location,
+    auth: state.auth
   };
 };
 

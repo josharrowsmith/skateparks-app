@@ -1,10 +1,12 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
-import MapView from "react-native-maps";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import MapView, { Callout } from "react-native-maps";
 import { device } from "../../constants";
 import styled from "styled-components";
 import Animated from "react-native-reanimated";
-import Pin from "../../assets/icons/pin"
+import { deletePark } from "../../store/actions/parks";
+import Pin from "../../assets/icons/pin";
+import { auth } from "firebase";
 const { interpolate, Extrapolate, Value } = Animated;
 
 const MarkerIcon = styled.View`
@@ -20,8 +22,29 @@ interface Iprops {
 }
 
 export default class Markers extends React.Component<Iprops> {
+  renderCallout(marker) {
+    return (
+      <>
+        {this.props.auth.admin && (
+          <Callout
+            tooltip
+            style={{
+              backgroundColor: "red",
+              height: 30,
+              width: 50,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text>Delete</Text>
+          </Callout>
+        )}
+      </>
+    );
+  }
   render() {
-    const { parks, x } = this.props;
+    const { parks, x, auth } = this.props;
     const interpolations = parks.map((marker, i) => {
       const inputRange = [
         (i - 1) * device.cardWidth,
@@ -42,6 +65,7 @@ export default class Markers extends React.Component<Iprops> {
 
       return { scale, opacity };
     });
+
     return (
       <>
         {parks.map((marker, index) => {
@@ -58,6 +82,11 @@ export default class Markers extends React.Component<Iprops> {
           };
           return (
             <MapView.Marker
+              onCalloutPress={() => {
+                if (auth.admin) {
+                  deletePark(marker.id);
+                }
+              }}
               key={marker.id}
               anchor={{ x: 0.5, y: 0.5 }}
               coordinate={{
@@ -68,6 +97,7 @@ export default class Markers extends React.Component<Iprops> {
               <Animated.View style={[scaleStyle, opacityStyle]}>
                 <MarkerIcon />
               </Animated.View>
+              {this.renderCallout(marker)}
             </MapView.Marker>
           );
         })}

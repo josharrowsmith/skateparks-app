@@ -2,6 +2,8 @@ import { GeoFirestore } from "geofirestore";
 import firebase from "../../config/firebase";
 import { ADD_PLACE, SET_PLACES, SET_LOCATION } from "./actionTypes"
 import { setLocation } from "./location"
+const db = firebase.firestore();
+
 
 export const getParks = (radius, lat, long) => {
   //yellow bar error 
@@ -83,4 +85,8 @@ export const addRating = (parkID, rating, user) => {
       });
     }
   }
+}
+
+export const deletePark = (id) => {
+  return db.collection('skateparks').doc(id).delete();
 }

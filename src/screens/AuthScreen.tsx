@@ -3,6 +3,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import * as authActions from "../store/actions/auth";
@@ -21,9 +22,7 @@ import {
   GoogleText,
 } from "../components/auth/BtnContainer";
 import styled, { ThemeProvider } from "styled-components";
-import * as Google from "expo-google-app-auth";
-import GoogleIcon from "../assets/icons/Google";
-import { ANDROID } from "react-native-dotenv";
+import GoogleAuth from "../components/auth/GoogleAuth";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -104,26 +103,6 @@ const AuthScreen = (props) => {
     }
   };
 
-  // Coming Soon
-  const signInWithGoogleAsync = async () => {
-    try {
-      const result = await Google.logInAsync({
-        androidClientId: ANDROID,
-        behavior: "web",
-        // iosClientId: '', //enter ios client id
-        scopes: ["profile", "email"],
-      });
-
-      if (result.type === "success") {
-        dispatch(authActions.onSignIn(result.idToken, result.accessToken));
-      } else {
-        return { cancelled: true };
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   return (
     <ThemeProvider theme={theme.mode === false ? lightTheme : darkTheme}>
       <AuthContainer>
@@ -180,10 +159,7 @@ const AuthScreen = (props) => {
             </ScrollView>
           </AuthTextBox>
         </KeyboardAvoidingView>
-        <GoogleBtn onPress={signInWithGoogleAsync}>
-          <GoogleIcon />
-          <GoogleText>Sign in with Google</GoogleText>
-        </GoogleBtn>
+        <GoogleAuth />
       </AuthContainer>
     </ThemeProvider>
   );

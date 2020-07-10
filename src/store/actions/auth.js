@@ -95,12 +95,12 @@ export const login = (email, password) => {
             authenticate(
                 resData.localId,
                 resData.idToken,
-                parseInt(7 * 1000 * 3600 * 24),
+                parseInt(resData.expiresIn) * 1000,
                 email
             )
         );
         const expirationDate = new Date(
-            new Date().getTime() + parseInt(7 * 1000 * 3600 * 24)
+            new Date().getTime() + parseInt(resData.expiresIn) * 1000
         );
         saveDataToStorage(resData.idToken, resData.localId, expirationDate, email);
     };
@@ -133,6 +133,7 @@ export const checkIfAdmin = (token) => {
 
 // Google Sign 
 export const onSignIn = (idToken, accessToken) => {
+
     return async dispatch => {
         const credential = firebase.auth.GoogleAuthProvider.credential(
             idToken,
@@ -141,21 +142,20 @@ export const onSignIn = (idToken, accessToken) => {
         // Sign in with credential from the Google user.
         firebase
             .auth()
-            .signInAndRetrieveDataWithCredential(credential)
+            .signInWithCredential(credential)
             .then(function (response) {
-
                 dispatch(
                     authenticate(
-                        response.user.uid,
+                        response.uid,
                         idToken,
                         parseInt(7889400000) * 1000,
-                        response.user.email,
+                        response.email,
                     )
                 );
                 const expirationDate = new Date(
                     new Date().getTime() + parseInt(7889400000) * 1000
                 );
-                saveDataToStorage(idToken, response.user.uid, expirationDate, response.user.email);
+                saveDataToStorage(idToken, response.uid, expirationDate, response.email);
             })
             .catch(function (error) {
                 console.log(error)
@@ -177,7 +177,7 @@ const clearLogoutTimer = () => {
 };
 
 // Token only last One hour so i will need to refresh it or rebuild auth 
-const refreshToken = (token) => {
+export const refreshToken = (token) => {
     return async dispatch => {
         const response = await fetch(
             `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
@@ -188,7 +188,7 @@ const refreshToken = (token) => {
                 },
                 body: JSON.stringify({
                     grant_type: 'refresh_token',
-                    refresh_token: token
+                    refresh_token: ''
                 })
             }
         )
@@ -197,7 +197,6 @@ const refreshToken = (token) => {
             console.log(errorResData)
         }
         const resData = await response.json();
-        console.log(resData)
     };
 }
 
@@ -206,7 +205,7 @@ const setLogoutTimer = expirationTime => {
     return dispatch => {
         timer = setTimeout(() => {
             if (expirationTime > 60000) {
-                // console.log(`set new exp:${expirationTime-60000}`);
+                console.log(`set new exp:${expirationTime - 60000}`);
                 dispatch(setLogoutTimer(expirationTime - 60000));
             }
             else {
