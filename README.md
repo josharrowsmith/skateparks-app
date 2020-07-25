@@ -35,11 +35,13 @@ Find a skatepark near you !
 - [x] Add multiple photos to skatepark
 - [x] Connect auth and skatepark
 - [x] Resize images cloud function
-- [ ] Add end points for adding a skatepark
+- [X] Add end points for adding a skatepark
 - [x] rating system
 - [ ] Cloud function for everything !!
 - [x] daily nofication via cloud funtion
 - [x] Admin accounts
+- [ ] Edit park images 
+
 
 # Navigation
 
