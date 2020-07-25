@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Linking,
   ActivityIndicator,
+  Button,
 } from "react-native";
 import { lightTheme, darkTheme } from "../../constants/theme";
 import { Bg, Btn, SmallFontInv } from "../../constants/globalStyles";
@@ -77,6 +78,19 @@ export default ({ route, navigation }) => {
   const location = useSelector((state) => state.location.location);
   const radius = useSelector((state) => state.radius.radius);
   const dispatch = useDispatch();
+
+  const ratePark = async (val) => {
+    await dispatch(addRating(park.id, val, localauth.email));
+    navigation.goBack();
+  };
+
+  const editPark = () => {
+    navigation.navigate("Add", {
+      screen: "MainImage",
+      params: { park: park },
+    });
+  };
+
   return (
     <>
       <ThemeProvider theme={theme.mode === false ? lightTheme : darkTheme}>
@@ -86,7 +100,7 @@ export default ({ route, navigation }) => {
             style={{ flex: 1 }}
             snapToInterval={device.width}
           >
-            {park.image.map((item, index) => {
+            {park.images.map((item, index) => {
               return (
                 <Image
                   key={item.toString()}
@@ -105,20 +119,12 @@ export default ({ route, navigation }) => {
             <TitleContainer>
               <Stars
                 half={true}
-                default={park.avgRating}
+                disabled={!localauth.admin}
+                default={park.rating}
                 spacing={5}
                 starSize={20}
                 count={5}
-                update={(val) => {
-                  dispatch(addRating(park.id, val, localauth.email));
-                  // Fix this later
-                  setTimeout(() => {
-                    dispatch(
-                      getParks(radius, location.latitude, location.longitude)
-                    );
-                    navigation.goBack();
-                  }, 2000);
-                }}
+                update={(val) => ratePark(val)}
                 fullStar={require("../../assets/starFilled.png")}
                 emptyStar={require("../../assets/starEmpty.png")}
                 halfStar={require("../../assets/starHalf.png")}

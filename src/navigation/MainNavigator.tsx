@@ -1,14 +1,21 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import SettingScreen from "../screens/SettingScreen";
 import MarkerScreen from "../components/map/MarkerScreen";
 import AuthScreen from "../screens/AuthScreen";
 import RadiusScreen from "../screens/RadiusScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
-import AddScreen from "../screens/AddScreen";
+import AddScreen from "../screens/Upload/AddScreen";
 import SearchScreen from "../screens/SearchScreen";
 import { useSelector } from "react-redux";
+import ImageBrowserScreen from "../screens/Upload/ImageBrowserScreen";
+import UploadScreen from "../screens/Upload/UploadScreen";
+import MapScreen from "../screens/Upload/MapScreen";
+import DetailsScreen from "../screens/Upload/DetailsScreen";
+import MainImageScreen from "../screens/Upload/MainImageScreen";
+import { Ionicons } from "@expo/vector-icons";
 
 const defaultNavOptions = {
   headerShown: false,
@@ -18,13 +25,89 @@ const MainStackNavigator = createStackNavigator();
 
 export const MainNavigator = () => {
   return (
-    <MainStackNavigator.Navigator screenOptions={defaultNavOptions}>
+    <MainStackNavigator.Navigator
+      screenOptions={defaultNavOptions}
+      initialRouteName="Home"
+    >
       <MainStackNavigator.Screen name="Home" component={HomeScreen} />
       <MainStackNavigator.Screen name="Settings" component={SettingScreen} />
       <MainStackNavigator.Screen name="Marker" component={MarkerScreen} />
-      <MainStackNavigator.Screen name="Add" component={AddScreen} />
-
+      <UploadTabsNavigator.Screen name="Add" component={UploadNavigator} />
     </MainStackNavigator.Navigator>
+  );
+};
+
+const ImagesStackNavigator = createStackNavigator();
+
+export const ImagesNavigator = () => {
+  return (
+    <ImagesStackNavigator.Navigator initialRouteName="MainImage">
+      <ImagesStackNavigator.Screen
+        name="MainImage"
+        component={MainImageScreen}
+        options={() => ({
+          headerShown: false,
+        })}
+      />
+      <ImagesStackNavigator.Screen
+        name="ImageUpload"
+        component={ImageBrowserScreen}
+        options={() => ({ title: null })}
+      />
+    </ImagesStackNavigator.Navigator>
+  );
+};
+
+const UploadTabsNavigator = createBottomTabNavigator();
+
+export const UploadNavigator = () => {
+  const isAuth = useSelector((state) => !!state.auth.admin);
+  return (
+    <UploadTabsNavigator.Navigator
+      initialRouteName="Details"
+      tabBarOptions={{
+        activeTintColor: "#000",
+      }}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+          if (route.name == "Image") {
+            iconName = "md-images";
+          } else if (route.name == "Details") {
+            iconName = "md-information-circle";
+          } else if (route.name == "Map") {
+            iconName = "md-pin";
+          } else if (route.name == "Upload") {
+            iconName = "md-cloud-upload";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+    >
+      {isAuth && (
+        <>
+          <UploadTabsNavigator.Screen
+            name="Details"
+            component={DetailsScreen}
+          />
+          <UploadTabsNavigator.Screen
+            name="Image"
+            component={ImagesNavigator}
+          />
+          <UploadTabsNavigator.Screen name="Map" component={MapScreen} />
+          <UploadTabsNavigator.Screen name="Upload" component={UploadScreen} />
+        </>
+      )}
+      {!isAuth && (
+        <MainStackNavigator.Screen
+          name="Add"
+          component={AddScreen}
+          options={() => ({
+            tabBarVisible: false,
+          })}
+        />
+      )}
+    </UploadTabsNavigator.Navigator>
   );
 };
 
@@ -35,6 +118,7 @@ export const ModalNavigator = () => {
     <ModalStack.Navigator
       mode="modal"
       headerMode="none"
+      initialRouteName="Main"
       screenOptions={{
         animationEnabled: true,
         cardStyle: { backgroundColor: "rgba(0, 0, 0, 0.15)" },

@@ -26,6 +26,7 @@ const WelcomeBtn = styled.TouchableOpacity`
   background: ${(props) => props.theme.text};
   width: 150px;
   height: 40px;
+  border-radius: 20px;
   flex-direction: row;
   justify-content: center;
   align-items: center;

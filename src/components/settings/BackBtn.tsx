@@ -30,10 +30,10 @@ const BackText = styled.Text`
   alignSelf: center;
 `
 
-const BackBtn = ({ navigation }) => (
-  <Back onPress={() => navigation.goBack()}>
+const BackBtn = ({ navigation, text }) => (
+  <Back onPress={() => navigation.navigate("Home")}>
     <X>X</X>
-    <BackText>Settings</BackText>
+    <BackText>{text}</BackText>
   </Back>
 );
 

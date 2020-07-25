@@ -1,14 +1,15 @@
 import React from "react";
-import MapView from "react-native-maps";
+import {View, Text} from "react-native"
+import MapView, { Callout } from "react-native-maps";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { getParks } from "../../store/actions/parks";
-import { setPark } from "../../store";
 import { setLocation } from "../../store/actions/location";
 
 const locationMaker = ({ currentRegion }) => {
   const radius = useSelector((state) => state.radius.radius);
   const parks = useSelector((state) => state.places.places);
+  const localauth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   return (
@@ -17,7 +18,7 @@ const locationMaker = ({ currentRegion }) => {
         latitude: currentRegion.latitude,
         longitude: currentRegion.longitude,
       }}
-      draggable
+      draggable={localauth.admin}
       onDragEnd={(e) => {
         dispatch(
           getParks(

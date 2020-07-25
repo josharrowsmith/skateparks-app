@@ -188,7 +188,6 @@ export const refreshToken = (token) => {
                 },
                 body: JSON.stringify({
                     grant_type: 'refresh_token',
-                    refresh_token: ''
                 })
             }
         )

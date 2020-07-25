@@ -9,9 +9,13 @@ export const REMOVE_NOTIFICATION = "REMOVE_NOTIFICATION";
 
 export const ADD_PLACE = 'ADD_PLACE';
 export const SET_PLACES = 'SET_PLACES';
+export const GET_PLACES = 'GET_PLACES';
+export const STORE_lOCATION = 'STORE_lOCATION';
+export const STORE_URLS = 'STORE_URLS';
+export const STORE_DETAILS = 'STORE_DETAILS';
+export const REMOVE_STORE = 'REMOVE_STORE';
 
 export const CHANGE_MODE = 'CHANGE_MODE';
-
 
 export const SIGNUP = 'SIGNUP';
 export const LOGIN = 'LOGIN';

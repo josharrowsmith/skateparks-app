@@ -23,8 +23,6 @@ export const Title = styled.Text`
 export const Btn = styled.TouchableOpacity`
   background-color: ${(props) => props.theme.text};
   borderRadius: 30px;
-  justifyContent: center;
   display: flex;
-  alignItems: center;
-  padding: 3px 15px;
+  padding: 10px 15px;
 `;

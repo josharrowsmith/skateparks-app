@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Text, Button } from "react-native";
+import { Text, Button, View, TextInput } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { Bg, Btn, SmallFontInv, Title } from "../constants/globalStyles";
+import { Bg, Btn, SmallFontInv, Title } from "../../constants/globalStyles";
 import styled, { ThemeProvider } from "styled-components";
 import { useNavigation } from "@react-navigation/native";
-import { lightTheme, darkTheme } from "../constants/theme";
-import firebase from "../config/firebase";
+import { lightTheme, darkTheme } from "../../constants/theme";
+import firebase from "../../config/firebase";
 const functions = firebase.functions();
 
 const AddScreen = (props) => {
   const [IsAdmin, SetAdmin] = useState(false);
+  const [value, onChangeText] = useState();
   const theme = useSelector((state) => state.theme);
   const radius = useSelector((state) => state.radius.radius);
   const localauth = useSelector((state) => state.auth);
@@ -26,7 +27,7 @@ const AddScreen = (props) => {
   return (
     <ThemeProvider theme={theme.mode === false ? lightTheme : darkTheme}>
       <Bg>
-        {!localauth.admin && (
+        {localauth.admin && (
           <>
             <Title>You Don't have access</Title>
             <Btn onPress={goBack}>
@@ -34,11 +35,26 @@ const AddScreen = (props) => {
             </Btn>
           </>
         )}
-        {localauth.admin && (
+        {!localauth.admin && (
           <>
-            <Btn onPress={() => console.log("nope")}>
+            <Btn onPress={() => addToAdmin(value)}>
               <SmallFontInv>Make Admin</SmallFontInv>
             </Btn>
+            <View
+              style={{
+                width: "80%",
+                marginBottom: 10,
+                borderBottomColor: "#eee",
+                borderWidth: 1,
+                borderColor: "transparent",
+              }}
+            >
+              <TextInput
+                style={{}}
+                onChangeText={(text) => onChangeText(text)}
+                value={value}
+              />
+            </View>
             <Btn onPress={goBack}>
               <SmallFontInv>Go back</SmallFontInv>
             </Btn>

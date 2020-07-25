@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useRef } from "react";
-import MapView, { Circle } from "react-native-maps";
+import MapView, { Circle, PROVIDER_GOOGLE } from "react-native-maps";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getParks } from "../store/actions/parks";
@@ -142,6 +142,7 @@ class Markers extends React.PureComponent<IState> {
           ref={(map) => (this.map = map)}
           style={{ alignSelf: "stretch", flex: 1, marginTop: -100 }}
           customMapStyle={theme.mode ? DarkMap : LightMap}
+          provider={PROVIDER_GOOGLE}
           initialRegion={{
             latitude: currentRegion.latitude,
             longitude: currentRegion.longitude,
@@ -153,7 +154,7 @@ class Markers extends React.PureComponent<IState> {
           <Marker {...{ parks, x, auth }} />
         </MapView>
         <CenterLocation pressed={this.toggleCenter} {...{ theme }} />
-        {isToggled && (
+        {isToggled && parks.length >= 1 &&(
           <Cards
             {...{ parks }}
             MarkerAnimation={this.AnimateMarkers}

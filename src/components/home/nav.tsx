@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, View, Animated, Dimensions } from "react-native";
+import React, { Children } from "react";
+import { StyleSheet, View, Animated, Dimensions, TabBarIOS } from "react-native";
 import * as shape from "d3-shape";
 import Svg, { Path } from "react-native-svg";
 import Icons from "./icons";
@@ -34,14 +34,14 @@ interface NavProps {
 
 const { width } = Dimensions.get("window");
 const height = 64;
-const tabs = [
-  { icon: <PlusIcon />, action: "Add" },
-  { icon: <RadarIcon />, action: "Modal" },
-  { icon: <ToggleIcon />, action: "toggle" },
-  { icon: <SearchIcon />, action: "Search" },
-  { icon: <SettingIcon />, action: "Settings" },
-];
-const tabWidth = width / tabs.length;
+// const tabs = [
+//   { icon: <PlusIcon />, action: "Add" },
+//   { icon: <RadarIcon />, action: "Modal" },
+//   { icon: <ToggleIcon />, action: "toggle" },
+//   { icon: <SearchIcon />, action: "Search" },
+//   { icon: <SettingIcon />, action: "Settings" },
+// ];
+const tabWidth = width / 5
 
 const getPath = (): string => {
   const left = shape
@@ -85,7 +85,7 @@ class Nav extends React.PureComponent<NavProps> {
 
   render() {
     const { value } = this;
-    const { toggle, navigation, theme } = this.props;
+    const { toggle, navigation, theme, tabs } = this.props;
     const translateX = value.interpolate({
       inputRange: [0, width],
       outputRange: [-width, 0],

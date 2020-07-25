@@ -34,6 +34,7 @@ import firebase from "../config/firebase";
 const db = firebase.firestore();
 
 const BACKGROUND_LOCATION_TASK_NAME = "bg-location-name";
+const text = "Settings"
 
 const SettingScreen = () => {
   const theme = useSelector((state) => state.theme);
@@ -69,17 +70,13 @@ const SettingScreen = () => {
     setThing(state);
   }
 
-  // Android needs a sticky nofication for reasons ....
+  // Stupid Ios
   async function enabled() {
     await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK_NAME, {
       accuracy: Location.Accuracy.Highest,
       distanceInterval: 0,
-      timeInterval: 30000,
-      showsBackgroundLocationIndicator: true,
-      foregroundService: {
-        notificationTitle: "location tracking",
-        notificationBody: "Notification Body",
-      },
+      timeInterval: 600000,
+      showsBackgroundLocationIndicator: true
     });
   }
 
@@ -91,7 +88,7 @@ const SettingScreen = () => {
   return (
     <ThemeProvider theme={theme.mode === false ? lightTheme : darkTheme}>
       <Bg>
-        <BackBtn {...{ navigation }} />
+        <BackBtn {...{ navigation }} text={"Settings"} />
         <SettingContainer>
           <Title />
           <Grid>
@@ -152,14 +149,14 @@ if (!TaskManager.isTaskDefined(BACKGROUND_LOCATION_TASK_NAME)) {
       }
       if (data) {
         const { locations } = data;
-        const theme = await AsyncStorage.getItem("userData");
-        const transformedData = JSON.parse(theme);
-        const { userId } = transformedData;
-        const storageRadius = await AsyncStorage.getItem("radius");
-        const transformedData2 = JSON.parse(storageRadius);
-        const radius = 5;
-        Msg(radius, locations, userId);
-        // Need this if using the cloud functions 
+        console.log("yes")
+        // const theme = await AsyncStorage.getItem("userData");
+        // const transformedData = JSON.parse(theme);
+        // const { userId } = transformedData;
+        // const storageRadius = await AsyncStorage.getItem("radius");
+        // const transformedData2 = JSON.parse(storageRadius);
+        // // const radius = 5;
+        // // Msg(radius, locations, userId);
         // db.collection("users")
         //   .doc(userId)
         //   .update({

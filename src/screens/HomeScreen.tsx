@@ -16,6 +16,12 @@ import { notificationToken } from "../store/actions/auth";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../constants/theme";
 import { checkIfAdmin } from "../store/actions/auth";
+import SettingIcon from "../assets/icons/Setting";
+import RadarIcon from "../assets/icons/Radar";
+import PlusIcon from "../assets/icons/Plus";
+import SearchIcon from "../assets/icons/Search";
+import ToggleIcon from "../assets/icons/Toggle";
+
 
 interface IState {
   location: object;
@@ -24,6 +30,15 @@ interface IState {
   longitudeDelta: number;
   navigation: any;
 }
+
+// Leave this here
+const tabs = [
+  { icon: <PlusIcon />, action: "Add" },
+  { icon: <RadarIcon />, action: "Modal" },
+  { icon: <ToggleIcon />, action: "toggle" },
+  { icon: <SearchIcon />, action: "Search" },
+  { icon: <SettingIcon />, action: "Settings" },
+];
 
 const Main = ({ navigation }: IState) => {
   const [isToggled, setToggled] = useState(false);
@@ -117,7 +132,12 @@ const Main = ({ navigation }: IState) => {
         theme={theme}
         navigation={navigation}
       />
-      <Nav navigation={navigation} toggle={toggleTrueFalse} theme={theme} />
+      <Nav
+        navigation={navigation}
+        toggle={toggleTrueFalse}
+        theme={theme}
+        tabs={tabs}
+      />
     </ThemeProvider>
   );
 };

@@ -113,7 +113,7 @@ export default class Icons extends React.PureComponent<StaticTabbarProps> {
                     toggle(true);
                   } else {
                     navigation.navigate(tab.action);
-                    toggle(false)
+                    toggle(false);
                   }
                   this.onPress(key, tab);
                 }}
