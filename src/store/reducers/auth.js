@@ -11,6 +11,7 @@ export default (state = initialState, action) => {
         case AUTHENTICATE:
             return {
                 token: action.token,
+                refresh: action.refresh,
                 userId: action.userId,
                 email: action.email,
                 didTryAutoLogin: true,

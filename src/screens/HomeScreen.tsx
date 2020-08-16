@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Platform } from "react-native";
+import { Platform, AsyncStorage } from "react-native";
 import {
   requestPermissionsAsync,
   watchPositionAsync,
@@ -15,13 +15,14 @@ import { setLocation } from "../store/actions/location";
 import { notificationToken } from "../store/actions/auth";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../constants/theme";
-import { checkIfAdmin } from "../store/actions/auth";
+import { checkIfAdmin, refreshToken } from "../store/actions/auth";
 import SettingIcon from "../assets/icons/Setting";
 import RadarIcon from "../assets/icons/Radar";
 import PlusIcon from "../assets/icons/Plus";
 import SearchIcon from "../assets/icons/Search";
 import ToggleIcon from "../assets/icons/Toggle";
-
+import firebase from "../config/firebase";
+import * as authActions from "../store/actions/auth";
 
 interface IState {
   location: object;
@@ -75,12 +76,30 @@ const Main = ({ navigation }: IState) => {
         );
       }
     }
-
+   
     loadInitialLocation();
   }, [radius]);
 
   useEffect(() => {
+    const getToken = async () => {
+      const userData = await AsyncStorage.getItem("userData");
+      const transformedData = JSON.parse(userData);
+      const { userId, expiryDate, email, token } = transformedData;
+      const expirationDate = new Date(expiryDate);
+      if (expirationDate <= new Date() || !token || !userId) {
+        return;
+      }
+      const expirationTime = expirationDate.getTime() - new Date().getTime();
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          user.getIdToken().then(function(data) {
+            dispatch(authActions.authenticate(userId, data, null, expirationTime, email));
+          });
+        }
+      });
+    };
     getPushNotificationPermissions();
+    getToken();
   }, []);
 
   async function getPushNotificationPermissions() {

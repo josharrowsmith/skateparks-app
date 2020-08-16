@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   ScrollView,
+  TextInput,
   TouchableOpacity,
   Linking,
   ActivityIndicator,
@@ -15,8 +16,9 @@ import { Bg, Btn, SmallFontInv } from "../../constants/globalStyles";
 import styled, { ThemeProvider } from "styled-components";
 import { device } from "../../constants";
 import { useSelector, useDispatch } from "react-redux";
-import { addRating, getParks } from "../../store/actions/parks";
+import { addRating, editPark } from "../../store/actions/parks";
 import Stars from "react-native-stars";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Iprops {
   parks: any;
@@ -32,14 +34,14 @@ const Container = styled.View`
 
 const TitleContainer = styled.View`
   display: flex;
-  flexDirection: row;
+  flex-direction: row;
   justify-content: space-between;
   padding: 0 10px;
   align-items: center;
   width: ${device.width};
 `;
 
-const ParkTitle = styled.Text`
+const ParkTitle = styled.TextInput`
   padding: 0 10px;
   font-size: 20px;
   color: ${(props) => props.theme.text};
@@ -69,6 +71,11 @@ const BackBtn = styled.Text`
   font-size: 38px;
 `;
 
+const FullStar = styled(Ionicons)`
+  color: ${(props) => props.theme.text};
+  font-size: 38px;
+`;
+
 export default ({ route, navigation }) => {
   const { park } = route.params;
   const { theme } = route.params;
@@ -77,6 +84,8 @@ export default ({ route, navigation }) => {
   const localauth = useSelector((state) => state.auth);
   const location = useSelector((state) => state.location.location);
   const radius = useSelector((state) => state.radius.radius);
+  const [name, onChangeName] = useState();
+  const [desc, onChangeDescription] = useState();
   const dispatch = useDispatch();
 
   const ratePark = async (val) => {
@@ -84,11 +93,15 @@ export default ({ route, navigation }) => {
     navigation.goBack();
   };
 
-  const editPark = () => {
-    navigation.navigate("Add", {
-      screen: "MainImage",
-      params: { park: park },
-    });
+  const updatePark = () => {
+    if (name) {
+      dispatch(editPark(name, park.id, "name"));
+      onChangeName(null);
+    }
+    if (desc) {
+      dispatch(editPark(desc, park.id, "description"));
+      onChangeDescription(null);
+    }
   };
 
   return (
@@ -115,19 +128,24 @@ export default ({ route, navigation }) => {
             })}
           </ScrollView>
           <ScrollView style={{ flex: 2 }}>
-            <ParkTitle>{park.name}</ParkTitle>
+            <ParkTitle
+              editable={localauth.admin}
+              onChangeText={(text) => onChangeName(text)}
+            >
+              {park.name}
+            </ParkTitle>
             <TitleContainer>
               <Stars
                 half={true}
                 disabled={!localauth.admin}
                 default={park.rating}
                 spacing={5}
-                starSize={20}
+                starSize={30}
                 count={5}
                 update={(val) => ratePark(val)}
-                fullStar={require("../../assets/starFilled.png")}
-                emptyStar={require("../../assets/starEmpty.png")}
-                halfStar={require("../../assets/starHalf.png")}
+                fullStar={<FullStar name={'md-star'}/>}
+                emptyStar={<FullStar name={'md-star-outline'}/>}
+                halfStar={<FullStar name={'md-star-half'}/>}
               />
               <Btn
                 onPress={() =>
@@ -139,11 +157,21 @@ export default ({ route, navigation }) => {
                 <SmallFontInv font={18}>Maps</SmallFontInv>
               </Btn>
             </TitleContainer>
-            <ParkDescription>{park.description}</ParkDescription>
+            <ParkDescription
+              editable={localauth.admin}
+              onChangeText={(text) => onChangeDescription(text)}
+            >
+              {park.description}
+            </ParkDescription>
           </ScrollView>
+          {localauth.admin && (
+            <Btn style={{ marginBottom: 10 }} onPress={updatePark}>
+              <SmallFontInv font={18}>Done</SmallFontInv>
+            </Btn>
+          )}
         </Container>
         <Back>
-          <BackBtn onPress={() => navigation.goBack()}>X</BackBtn>
+          <BackBtn onPress={() => navigation.navigate("Home")}>X</BackBtn>
         </Back>
       </ThemeProvider>
     </>

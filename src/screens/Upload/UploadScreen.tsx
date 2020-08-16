@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { lightTheme, darkTheme } from "../../constants/theme";
 import BackBtn from "../../components/settings/BackBtn";
 import { addPark, clearData, uploadImages } from "../../store/actions/parks";
+import firebase from "../../config/firebase"
 
 const UploadScreen = (props) => {
   const navigation = useNavigation();
@@ -17,8 +18,9 @@ const UploadScreen = (props) => {
 
 
   const processPark = async () => {
-    const firebaseUrls = await uploadImages(urls, details.name);
-    await dispatch(addPark(firebaseUrls, location, details));
+    const id = firebase.firestore().collection("skateparks").doc().id;
+    const firebaseUrls = await uploadImages(urls, details.name, id);
+    await dispatch(addPark(id, firebaseUrls, location, details));
     navigation.navigate("Home");
     dispatch(clearData());
   };

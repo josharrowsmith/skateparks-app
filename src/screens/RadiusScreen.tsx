@@ -68,7 +68,7 @@ const RadiusScreen = (props) => {
         }}
         value={radius}
         minimumValue={0}
-        maximumValue={25}
+        maximumValue={15}
         minimumTrackTintColor={theme.mode ? "#fff" : "#000"}
         maximumTrackTintColor={theme.mode ? "#fff" : "#000"}
         thumbTintColor={theme.mode ? "#fff" : "#000"}

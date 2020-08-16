@@ -11,10 +11,10 @@ export const setDidTryAL = () => {
 };
 
 
-export const authenticate = (userId, token, expiryTime, email) => {
+export const authenticate = (userId, token, refresh, expiryTime, email) => {
     return dispatch => {
         dispatch(setLogoutTimer(expiryTime));
-        dispatch({ type: AUTHENTICATE, userId: userId, token: token, email: email, admin: false });
+        dispatch({ type: AUTHENTICATE, userId: userId, token: token, refresh: refresh, email: email, admin: false });
     };
 };
 
@@ -50,6 +50,7 @@ export const signup = (email, password) => {
             authenticate(
                 resData.localId,
                 resData.idToken,
+                resData.refresh_token,
                 parseInt(resData.expiresIn) * 1000,
                 email,
             )
@@ -57,7 +58,7 @@ export const signup = (email, password) => {
         const expirationDate = new Date(
             new Date().getTime() + parseInt(resData.expiresIn) * 1000
         );
-        saveDataToStorage(resData.idToken, resData.localId, expirationDate, email);
+        saveDataToStorage(resData.idToken, resData.localId, resData.refresh_token, expirationDate, email);
     };
 };
 
@@ -95,14 +96,15 @@ export const login = (email, password) => {
             authenticate(
                 resData.localId,
                 resData.idToken,
-                parseInt(resData.expiresIn) * 1000,
+                resData.refreshToken,
+                parseInt(1 * 1000 * 3600 * 24),
                 email
             )
         );
         const expirationDate = new Date(
-            new Date().getTime() + parseInt(resData.expiresIn) * 1000
+            new Date().getTime() + parseInt(1 * 1000 * 3600 * 24),
         );
-        saveDataToStorage(resData.idToken, resData.localId, expirationDate, email);
+        saveDataToStorage(resData.idToken, resData.localId, resData.refreshToken, expirationDate, email);
     };
 };
 
@@ -123,7 +125,6 @@ export const checkIfAdmin = (token) => {
         )
         if (!response.ok) {
             const errorResData = await response.json();
-            console.log(errorResData)
         }
         const resData = await response.json();
         const result = resData.users[0].customAttributes;
@@ -133,7 +134,6 @@ export const checkIfAdmin = (token) => {
 
 // Google Sign 
 export const onSignIn = (idToken, accessToken) => {
-
     return async dispatch => {
         const credential = firebase.auth.GoogleAuthProvider.credential(
             idToken,
@@ -143,22 +143,25 @@ export const onSignIn = (idToken, accessToken) => {
         firebase
             .auth()
             .signInWithCredential(credential)
-            .then(function (response) {
-                dispatch(
-                    authenticate(
-                        response.uid,
-                        idToken,
-                        parseInt(7889400000) * 1000,
-                        response.email,
-                    )
-                );
-                const expirationDate = new Date(
-                    new Date().getTime() + parseInt(7889400000) * 1000
-                );
-                saveDataToStorage(idToken, response.uid, expirationDate, response.email);
+            .then(response => {
+                response.getIdToken().then(newidToken => {
+                    dispatch(
+                        authenticate(
+                            response.uid,
+                            newidToken,
+                            accessToken,
+                             parseInt(1 * 1000 * 3600 * 24),
+                            response.email,
+                        )
+                    );
+                    const expirationDate = new Date(
+                        new Date().getTime() +  parseInt(1 * 1000 * 3600 * 24)
+                    );
+                    saveDataToStorage(newidToken, response.uid, accessToken, expirationDate, response.email);
+                })
             })
             .catch(function (error) {
-                console.log(error)
+                alert(JSON.stringify(error));
             });
     }
 
@@ -177,8 +180,11 @@ const clearLogoutTimer = () => {
 };
 
 // Token only last One hour so i will need to refresh it or rebuild auth 
-export const refreshToken = (token) => {
+export const refreshToken = () => {
     return async dispatch => {
+        const userData = await AsyncStorage.getItem("userData");
+        const transformedData = JSON.parse(userData);
+        const { token, refresh, email } = transformedData;
         const response = await fetch(
             `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`,
             {
@@ -188,6 +194,7 @@ export const refreshToken = (token) => {
                 },
                 body: JSON.stringify({
                     grant_type: 'refresh_token',
+                    refresh_token: refresh
                 })
             }
         )
@@ -196,31 +203,39 @@ export const refreshToken = (token) => {
             console.log(errorResData)
         }
         const resData = await response.json();
+        dispatch(
+            authenticate(
+                resData.user_id,
+                resData.id_token,
+                resData.refresh_token,
+                parseInt(resData.expires_in) * 1000,
+                email
+            )
+        );
+        const expirationDate = new Date(
+            new Date().getTime() + parseInt(resData.expires_in) * 1000
+        );
+        saveDataToStorage(resData.id_token, resData.user_id, resData.refresh_token, expirationDate, email);
     };
 }
 
-
 const setLogoutTimer = expirationTime => {
     return dispatch => {
-        timer = setTimeout(() => {
-            if (expirationTime > 60000) {
-                console.log(`set new exp:${expirationTime - 60000}`);
-                dispatch(setLogoutTimer(expirationTime - 60000));
-            }
-            else {
-                // console.log('logout');
-                dispatch(logout());
-            }
-        }, 60000);
+      timer = setTimeout(() => {
+        alert(JSON.stringify(expirationTime))
+        dispatch(logout());
+      }, expirationTime);
     };
-};
+  };
+  
 
-const saveDataToStorage = (token, userId, expirationDate, email) => {
+const saveDataToStorage = (token, userId, refresh, expirationDate, email) => {
     AsyncStorage.setItem(
         'userData',
         JSON.stringify({
             token: token,
             userId: userId,
+            refresh: refresh,
             expiryDate: expirationDate.toISOString(),
             email: email
         })

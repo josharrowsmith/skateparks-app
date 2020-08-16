@@ -43,33 +43,12 @@ const WelcomeScreen = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const tryLogin = async () => {
-      const userData = await AsyncStorage.getItem("userData");
-      if (!userData) {
-        dispatch(authActions.setDidTryAL());
-        return;
-      }
-      const transformedData = JSON.parse(userData);
-      const { token, userId, expiryDate, email } = transformedData;
-      const expirationDate = new Date(expiryDate);
-
-      if (expirationDate <= new Date() || !token || !userId) {
-        dispatch(authActions.setDidTryAL());
-        return;
-      }
-
-      const expirationTime = expirationDate.getTime() - new Date().getTime();
-
-      dispatch(authActions.authenticate(userId, token, expirationTime, email));
-    };
-
     // Unsure why its not working for now
     const getStorage = async () => {
       const data = await AsyncStorage.getItem("theme");
       if (!data) {
         return;
       }
-
       const radius = await AsyncStorage.getItem("radius");
       if (!radius) {
         dispatch(setRadius(5));
@@ -81,7 +60,6 @@ const WelcomeScreen = (props) => {
       }
     };
     getStorage();
-    tryLogin();
   }, [dispatch]);
 
   return (

@@ -45,8 +45,7 @@ class GoogleAuth extends React.Component {
         clientId,
         webClientId,
       });
-    } catch ({ message }) {
-    }
+    } catch ({ message }) {}
   }
 
   render() {

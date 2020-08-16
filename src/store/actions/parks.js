@@ -3,6 +3,8 @@ import firebase from "../../config/firebase";
 import { reverseGeocodeAsync } from "expo-location";
 import { ADD_PLACE, STORE_lOCATION, STORE_URLS, GET_PLACES, STORE_DETAILS, REMOVE_STORE } from "./actionTypes"
 const db = firebase.firestore();
+const functions = firebase.functions();
+
 
 export const getParks = (radius, lat, long) => {
   //yellow bar error 
@@ -42,6 +44,7 @@ export const getParks = (radius, lat, long) => {
   };
 };
 
+// I will fix this later
 const checkVoted = async (user, parkID) => {
   const query = firebase
     .firestore()
@@ -50,38 +53,24 @@ const checkVoted = async (user, parkID) => {
     .collection("ratings")
     .limit(100)
   const doc = await query.get();
-  const stuff = [];
+  const users = [];
   const result = await doc.forEach((doc) => {
     if (doc.data().user == user)
-      stuff.push(false)
+      users.push(false)
   });
-  return stuff;
+  return users;
 }
 
 export const addRating = (parkID, rating, user) => {
   return async dispatch => {
-    const collection = firebase.firestore().collection("skateparks");
-    const document = collection.doc(parkID);
-    const newRatingDocument = document.collection("ratings").doc();
+    const addRatings = functions.httpsCallable("ratePark");
     const validUser = await checkVoted(user, parkID)
     if (validUser && !validUser.length) {
-      return firebase.firestore().runTransaction(transaction => {
-        return transaction.get(document).then(doc => {
-          const data = doc.data();
-          const newAverage =
-            (data.d.numRatings * data.d.rating + rating) /
-            (data.d.numRatings + 1);
-          transaction.set(document, {
-            d: {
-              numRatings: data.d.numRatings + 1,
-              rating: newAverage,
-            }
-          }, { merge: true });
-          return transaction.set(newRatingDocument, { rating: rating, user: user });
-        });
+      addRatings({ parkID, rating, user }).then((result) => {
+        console.log("done");
       });
     } else {
-      console.log("cant vote")
+      alert("you have already voted dude")
     }
   }
 }
@@ -90,7 +79,7 @@ export const deletePark = (id) => {
   return db.collection('skateparks').doc(id).delete();
 }
 
-export const uploadImages = async (images, name) => {
+export const uploadImages = async (images, name, id) => {
   const firebaseUrl = [];
   for (let x = 0; x < images.length; x++) {
     const response = await fetch(
@@ -99,7 +88,8 @@ export const uploadImages = async (images, name) => {
         method: "POST",
         body: JSON.stringify({
           image: images[x].base64,
-          name: name
+          name: name,
+          id: id
         })
       }
     );
@@ -109,6 +99,7 @@ export const uploadImages = async (images, name) => {
   }
   return Promise.all(firebaseUrl);
 }
+
 
 export const storeUrls = (urls) => {
   return dispatch => {
@@ -145,8 +136,7 @@ export const clearData = () => {
 };
 
 
-
-export const addPark = (urls, location, details) => {
+export const addPark = (id, urls, location, details) => {
   return async dispatch => {
     const lats = location.latitude
     const lng = location.longitude
@@ -161,9 +151,44 @@ export const addPark = (urls, location, details) => {
 
     const geofirestore = new GeoFirestore(firebase.firestore());
     const geocollection = geofirestore.collection("skateparks");
-    geocollection.add(doc).then(async docRef => {
+    geocollection.doc(id).set(doc).then(async docRef => {
       console.log("added");
     });
 
   }
 }
+
+export const editPark = (name, id, type) => {
+  return async dispatch => {
+    const query = await firebase
+      .firestore()
+      .collection("skateparks")
+      .doc(id)
+    if (type == "name") {
+      query.set({
+        d: { name: name }
+      }, { merge: true })
+    } else {
+      query.set({
+        d: { description: name }
+      }, { merge: true })
+    }
+
+  }
+}
+
+export const goToPark = (id) => {
+  return async dispatch => {
+    const cityRef = firebase
+      .firestore()
+      .collection("skateparks")
+      .doc(id);
+    const doc = await cityRef.get();
+    if (!doc.exists) {
+      console.log("No such document!");
+    } else {
+      return doc.data();
+    }
+  }
+}
+

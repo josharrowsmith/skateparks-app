@@ -37,10 +37,10 @@ Find a skatepark near you !
 - [x] Resize images cloud function
 - [X] Add end points for adding a skatepark
 - [x] rating system
-- [ ] Cloud function for everything !!
+- [X] Cloud function for everything !!
 - [x] daily nofication via cloud funtion
 - [x] Admin accounts
-- [ ] Edit park images 
+- [X] Edit park images 
 
 
 # Navigation
@@ -49,7 +49,7 @@ Find a skatepark near you !
 
 # Other features
 
-- [ ] Search
+- [X] Search
 - [x] Change location with drag
 - [ ] Add typescript dude
 - [x] Dark mode never not dark mode

@@ -47,7 +47,7 @@ const ImageBrowserScreen = (props) => {
             base64: pPhoto.base64,
           });
         }
-        navigation.navigate("Main", { photos: cPhotos });
+        navigation.navigate("MainImage", { photos: cPhotos });
       })
       .catch((e) => console.log(e));
   };
