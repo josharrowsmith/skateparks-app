@@ -11,101 +11,63 @@ export const setDidTryAL = () => {
 };
 
 
-export const authenticate = (userId, token, refresh, expiryTime, email) => {
+export const authenticate = (userId, token, refresh, expiryTime, email, admin) => {
     return dispatch => {
         dispatch(setLogoutTimer(expiryTime));
-        dispatch({ type: AUTHENTICATE, userId: userId, token: token, refresh: refresh, email: email, admin: false });
+        dispatch({ type: AUTHENTICATE, userId: userId, token: token, refresh: refresh, email: email, admin: admin });
     };
 };
 
 export const signup = (email, password) => {
     return async dispatch => {
-        const response = await fetch(
-            `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                    returnSecureToken: true
-                })
-            }
-        );
-
-        if (!response.ok) {
-            const errorResData = await response.json();
-            const errorId = errorResData.error.message;
-            let message = 'Something went wrong!';
-            if (errorId === 'EMAIL_EXISTS') {
-                message = 'This email exists already!';
-            }
-            throw new Error(message);
+        try {
+            const auth = await firebase.auth().createUserWithEmailAndPassword(email, password)
+            const { claims, token } = await firebase.auth().currentUser.getIdTokenResult();
+            dispatch(
+                authenticate(
+                    auth.user.uid,
+                    token,
+                    null,
+                    parseInt(1 * 1000 * 3600 * 24),
+                    auth.user.email,
+                    claims.admin
+                )
+            );
+            const expirationDate = new Date(
+                new Date().getTime() + parseInt(1 * 1000 * 3600 * 24),
+            );
+            saveDataToStorage(token, auth.user.uid, null, expirationDate, auth.user.email, claims.admin);
+        } catch (err) {
+            alert(err);
         }
-
-        const resData = await response.json();
-        dispatch(
-            authenticate(
-                resData.localId,
-                resData.idToken,
-                resData.refresh_token,
-                parseInt(resData.expiresIn) * 1000,
-                email,
-            )
-        );
-        const expirationDate = new Date(
-            new Date().getTime() + parseInt(resData.expiresIn) * 1000
-        );
-        saveDataToStorage(resData.idToken, resData.localId, resData.refresh_token, expirationDate, email);
     };
 };
 
+
 export const login = (email, password) => {
     return async dispatch => {
-        const response = await fetch(
-            `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                    returnSecureToken: true
-                })
-            }
-        );
-
-        if (!response.ok) {
-            const errorResData = await response.json();
-            const errorId = errorResData.error.message;
-            let message = 'Something went wrong!';
-            if (errorId === 'EMAIL_NOT_FOUND') {
-                message = 'This email could not be found!';
-            } else if (errorId === 'INVALID_PASSWORD') {
-                message = 'This password is not valid!';
-            }
-            throw new Error(message);
+        try {
+            const auth = await firebase.auth().signInWithEmailAndPassword(email, password)
+            const { claims, token } = await firebase.auth().currentUser.getIdTokenResult();
+            dispatch(
+                authenticate(
+                    auth.user.uid,
+                    token,
+                    null,
+                    parseInt(1 * 1000 * 3600 * 24),
+                    auth.user.email,
+                    claims.admin
+                )
+            );
+            const expirationDate = new Date(
+                new Date().getTime() + parseInt(1 * 1000 * 3600 * 24),
+            );
+            saveDataToStorage(token, auth.user.uid, null, expirationDate, auth.user.email, claims.admin);
+        } catch (err) {
+            alert(err);
         }
 
-        const resData = await response.json();
-        dispatch(
-            authenticate(
-                resData.localId,
-                resData.idToken,
-                resData.refreshToken,
-                parseInt(1 * 1000 * 3600 * 24),
-                email
-            )
-        );
-        const expirationDate = new Date(
-            new Date().getTime() + parseInt(1 * 1000 * 3600 * 24),
-        );
-        saveDataToStorage(resData.idToken, resData.localId, resData.refreshToken, expirationDate, email);
-    };
+    }
 };
 
 
@@ -125,10 +87,12 @@ export const checkIfAdmin = (token) => {
         )
         if (!response.ok) {
             const errorResData = await response.json();
+            alert(errorResData)
         }
         const resData = await response.json();
         const result = resData.users[0].customAttributes;
-        return result;
+        const admin = JSON.parse(result);
+        return admin.admin;
     };
 }
 
@@ -139,30 +103,26 @@ export const onSignIn = (idToken, accessToken) => {
             idToken,
             accessToken
         );
-        // Sign in with credential from the Google user.
-        firebase
-            .auth()
-            .signInWithCredential(credential)
-            .then(response => {
-                response.getIdToken().then(newidToken => {
-                    dispatch(
-                        authenticate(
-                            response.uid,
-                            newidToken,
-                            accessToken,
-                             parseInt(1 * 1000 * 3600 * 24),
-                            response.email,
-                        )
-                    );
-                    const expirationDate = new Date(
-                        new Date().getTime() +  parseInt(1 * 1000 * 3600 * 24)
-                    );
-                    saveDataToStorage(newidToken, response.uid, accessToken, expirationDate, response.email);
-                })
-            })
-            .catch(function (error) {
-                alert(JSON.stringify(error));
-            });
+        try {
+            const auth = await firebase.auth().signInWithCredential(credential)
+            const { claims, token } = await firebase.auth().currentUser.getIdTokenResult();
+            dispatch(
+                authenticate(
+                    auth.uid,
+                    token,
+                    null,
+                    parseInt(1 * 1000 * 3600 * 24),
+                    auth.email,
+                    claims.admin
+                )
+            );
+            const expirationDate = new Date(
+                new Date().getTime() + parseInt(1 * 1000 * 3600 * 24),
+            );
+            saveDataToStorage(token, auth.uid, null, expirationDate, auth.email, claims.admin);
+        } catch (err) {
+            alert(err);
+        }
     }
 
 };
@@ -221,15 +181,15 @@ export const refreshToken = () => {
 
 const setLogoutTimer = expirationTime => {
     return dispatch => {
-      timer = setTimeout(() => {
-        alert(JSON.stringify(expirationTime))
-        dispatch(logout());
-      }, expirationTime);
+        timer = setTimeout(() => {
+            alert(JSON.stringify(expirationTime))
+            dispatch(logout());
+        }, expirationTime);
     };
-  };
-  
+};
 
-const saveDataToStorage = (token, userId, refresh, expirationDate, email) => {
+
+const saveDataToStorage = (token, userId, refresh, expirationDate, email, admin) => {
     AsyncStorage.setItem(
         'userData',
         JSON.stringify({
@@ -237,7 +197,8 @@ const saveDataToStorage = (token, userId, refresh, expirationDate, email) => {
             userId: userId,
             refresh: refresh,
             expiryDate: expirationDate.toISOString(),
-            email: email
+            email: email,
+            admin: admin
         })
     );
 };

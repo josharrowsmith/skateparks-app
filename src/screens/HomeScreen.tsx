@@ -76,7 +76,7 @@ const Main = ({ navigation }: IState) => {
         );
       }
     }
-   
+
     loadInitialLocation();
   }, [radius]);
 
@@ -84,7 +84,7 @@ const Main = ({ navigation }: IState) => {
     const getToken = async () => {
       const userData = await AsyncStorage.getItem("userData");
       const transformedData = JSON.parse(userData);
-      const { userId, expiryDate, email, token } = transformedData;
+      const { userId, expiryDate, email, token, admin } = transformedData;
       const expirationDate = new Date(expiryDate);
       if (expirationDate <= new Date() || !token || !userId) {
         return;
@@ -93,12 +93,21 @@ const Main = ({ navigation }: IState) => {
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
           user.getIdToken().then(function(data) {
-            dispatch(authActions.authenticate(userId, data, null, expirationTime, email));
+            dispatch(
+              authActions.authenticate(
+                userId,
+                data,
+                null,
+                expirationTime,
+                email,
+                admin
+              )
+            );
           });
         }
       });
     };
-    getPushNotificationPermissions();
+    // getPushNotificationPermissions();
     getToken();
   }, []);
 
@@ -127,15 +136,6 @@ const Main = ({ navigation }: IState) => {
       });
     }
   }
-
-  useEffect(() => {
-    async function checkAdmin() {
-      const result = await dispatch(checkIfAdmin(localauth.token));
-      const isAdmin = await JSON.parse(result);
-      localauth.admin = await isAdmin.admin;
-    }
-    checkAdmin();
-  }, [localauth]);
 
   if (!currentRegion) {
     return null;
