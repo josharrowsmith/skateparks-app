@@ -16,7 +16,7 @@ import { Bg, Btn, SmallFontInv } from "../../constants/globalStyles";
 import styled, { ThemeProvider } from "styled-components";
 import { device } from "../../constants";
 import { useSelector, useDispatch } from "react-redux";
-import { addRating, editPark } from "../../store/actions/parks";
+import { addRating, editPark, deletePark } from "../../store/actions/parks";
 import Stars from "react-native-stars";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -93,6 +93,11 @@ export default ({ route, navigation }) => {
     navigation.goBack();
   };
 
+  const deleteCollection = async () => {
+    await dispatch(deletePark(park.id));
+    navigation.goBack();
+  };
+
   const updatePark = () => {
     if (name) {
       dispatch(editPark(name, park.id, "name"));
@@ -143,9 +148,9 @@ export default ({ route, navigation }) => {
                 starSize={30}
                 count={5}
                 update={(val) => ratePark(val)}
-                fullStar={<FullStar name={'md-star'}/>}
-                emptyStar={<FullStar name={'md-star-outline'}/>}
-                halfStar={<FullStar name={'md-star-half'}/>}
+                fullStar={<FullStar name={"md-star"} />}
+                emptyStar={<FullStar name={"md-star-outline"} />}
+                halfStar={<FullStar name={"md-star-half"} />}
               />
               <Btn
                 onPress={() =>
@@ -165,9 +170,14 @@ export default ({ route, navigation }) => {
             </ParkDescription>
           </ScrollView>
           {localauth.admin && (
-            <Btn style={{ marginBottom: 10 }} onPress={updatePark}>
-              <SmallFontInv font={18}>Done</SmallFontInv>
-            </Btn>
+            <View style={{display:"flex", flexDirection: "row"}}>
+              <Btn style={{ marginBottom: 10 }} onPress={updatePark}>
+                <SmallFontInv font={18}>update</SmallFontInv>
+              </Btn>
+              <Btn style={{ marginBottom: 10 }} onPress={deleteCollection}>
+                <SmallFontInv font={18}>delete</SmallFontInv>
+              </Btn>
+            </View>
           )}
         </Container>
         <Back>

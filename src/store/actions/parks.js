@@ -9,7 +9,11 @@ const functions = firebase.functions();
 export const getParks = (radius, lat, long) => {
   //yellow bar error 
   console.disableYellowBox = true;
+
   return async dispatch => {
+    if (radius == 0) {
+      radius = 1;
+    }
     const firestore = firebase.firestore();
     const geofirestore = new GeoFirestore(firestore);
     const geocollection = geofirestore.collection("skateparks");
@@ -46,6 +50,7 @@ export const getParks = (radius, lat, long) => {
 
 // I will fix this later
 const checkVoted = async (user, parkID) => {
+  console.log(parkID)
   const query = firebase
     .firestore()
     .collection("skateparks")
@@ -76,7 +81,10 @@ export const addRating = (parkID, rating, user) => {
 }
 
 export const deletePark = (id) => {
-  return db.collection('skateparks').doc(id).delete();
+  const deleteCollection = functions.httpsCallable("deleteCollection");
+  deleteCollection({ id: id }).then((result) => {
+    console.log(result);
+  });
 }
 
 export const uploadImages = async (images, name, id) => {

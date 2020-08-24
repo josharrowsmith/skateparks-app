@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Text,
-  StyleSheet,
-  Slider,
-  TouchableOpacity,
-} from "react-native";
+import { Text, StyleSheet, Slider, TouchableOpacity } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { device } from "../constants";
 import { useNavigation } from "@react-navigation/native";
@@ -27,7 +22,6 @@ const RadiusScreen = (props) => {
   const dispatch = useDispatch();
   const { goBack } = useNavigation();
 
-
   return (
     <TouchableOpacity
       onPress={() => goBack()}
@@ -43,7 +37,7 @@ const RadiusScreen = (props) => {
         <Circle
           cx={center.x}
           cy={center.y}
-          r={(radius * 100) / radius}
+          r={radius == 0 ? 1 : (radius * 100) / radius}
           fill={theme.mode ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)"}
         />
       </Svg>
@@ -68,7 +62,7 @@ const RadiusScreen = (props) => {
         }}
         value={radius}
         minimumValue={0}
-        maximumValue={15}
+        maximumValue={20}
         minimumTrackTintColor={theme.mode ? "#fff" : "#000"}
         maximumTrackTintColor={theme.mode ? "#fff" : "#000"}
         thumbTintColor={theme.mode ? "#fff" : "#000"}
