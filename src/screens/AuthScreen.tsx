@@ -159,7 +159,7 @@ const AuthScreen = (props) => {
             </ScrollView>
           </AuthTextBox>
         </KeyboardAvoidingView>
-        <GoogleAuth />
+        <GoogleAuth loading={setIsLoading} />
       </AuthContainer>
     </ThemeProvider>
   );
