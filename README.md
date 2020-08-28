@@ -53,7 +53,9 @@ Find a skatepark near you !
 - [x] Change location with drag
 - [ ] Add typescript dude
 - [x] Dark mode never not dark mode
-
+- [ ] Rewrite Markers page with hooks 
+- [ ] Center map when opening radius screen
+ 
 # Bugs
 
 - [ ] everything on ios ahahahahahha
