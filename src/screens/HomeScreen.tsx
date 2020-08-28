@@ -78,7 +78,7 @@ const Main = ({ navigation }: IState) => {
     }
 
     loadInitialLocation();
-  }, [radius]);
+  }, []);
 
   useEffect(() => {
     const getToken = async () => {

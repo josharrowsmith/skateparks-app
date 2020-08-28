@@ -70,7 +70,7 @@ class Markers extends React.PureComponent<IState> {
     const { latitudeDelta, longitudeDelta } = this.state;
     this.map.animateToRegion(
       {
-        latitude: location.latitude, 
+        latitude: location.latitude,
         longitude: location.longitude,
         latitudeDelta: latitudeDelta,
         longitudeDelta: longitudeDelta,
@@ -92,10 +92,12 @@ class Markers extends React.PureComponent<IState> {
 
   //Zooms in the map on new radius
   zommIn = () => {
-    if (this.props.radius >= 5) {
+    const { currentRegion, location, radius } = this.props;
+    const { latitudeDelta, longitudeDelta } = this.state;
+    if (radius >= 5) {
       region = {
-        latitude: this.props.currentRegion.latitude,
-        longitude: this.props.currentRegion.longitude,
+        latitude: location.latitude,
+        longitude: location.longitude,
         latitudeDelta: this.state.latitudeDelta - 0.15,
         longitudeDelta: this.state.longitudeDelta - 0.15,
       };
@@ -109,10 +111,12 @@ class Markers extends React.PureComponent<IState> {
 
   //Zooms out the map on new radius
   zommOut = () => {
-    if (this.props.radius > 6) {
+    const { currentRegion, location, radius } = this.props;
+    const { latitudeDelta, longitudeDelta } = this.state;
+    if (radius > 6) {
       region = {
-        latitude: this.props.currentRegion.latitude,
-        longitude: this.props.currentRegion.longitude,
+        latitude: location.latitude,
+        longitude: location.longitude,
         latitudeDelta: this.state.latitudeDelta + 0.15,
         longitudeDelta: this.state.longitudeDelta + 0.15,
       };
@@ -133,7 +137,7 @@ class Markers extends React.PureComponent<IState> {
       theme,
       navigation,
       radius,
-      auth
+      auth,
     } = this.props;
 
     return (
@@ -154,7 +158,7 @@ class Markers extends React.PureComponent<IState> {
           <Marker {...{ parks, x, auth }} />
         </MapView>
         <CenterLocation pressed={this.toggleCenter} {...{ theme }} />
-        {isToggled && parks.length >= 1 &&(
+        {isToggled && parks.length >= 1 && (
           <Cards
             {...{ parks }}
             MarkerAnimation={this.AnimateMarkers}
@@ -170,7 +174,7 @@ class Markers extends React.PureComponent<IState> {
 const mapStateToProps = (state) => {
   return {
     location: state.location.location,
-    auth: state.auth
+    auth: state.auth,
   };
 };
 

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { device } from "../constants";
 import { useNavigation } from "@react-navigation/native";
 import { setRadius } from "../store/actions/radius";
+import { getParks } from "../store/actions/parks";
 import Svg, { Circle } from "react-native-svg";
 // fix it later
 // import Slider from "../components/slider/Slider";
@@ -19,8 +20,10 @@ const center = {
 const RadiusScreen = (props) => {
   const theme = useSelector((state) => state.theme);
   const radius = useSelector((state) => state.radius.radius);
+  const location = useSelector((state) => state.location.location);
   const dispatch = useDispatch();
   const { goBack } = useNavigation();
+  console.log(location);
 
   return (
     <TouchableOpacity
@@ -67,8 +70,9 @@ const RadiusScreen = (props) => {
         maximumTrackTintColor={theme.mode ? "#fff" : "#000"}
         thumbTintColor={theme.mode ? "#fff" : "#000"}
         step={5}
-        onValueChange={(val) => {
-          dispatch(setRadius(val));
+        onValueChange={async (val) => {
+          await dispatch(setRadius(val));
+          dispatch(getParks(val, location.latitude, location.longitude));
         }}
       />
     </TouchableOpacity>
