@@ -151,7 +151,7 @@ const SearchBox = ({ currentRefinement, refine, theme }) => {
                 value={currentRefinement}
                 style={{
                   height: 30,
-                  fontSize: 18,
+                  fontSize: 15,
                   borderRadius: 15,
                   paddingHorizontal: 15,
                   opacity: animatedValue,

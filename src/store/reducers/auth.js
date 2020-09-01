@@ -3,7 +3,8 @@ import { AUTHENTICATE, LOGOUT, SET_DID_TRY_AL } from '../actions/actionTypes'
 const initialState = {
     token: null,
     userId: null,
-    didTryAutoLogin: false
+    didTryAutoLogin: false,
+    admin: false
 };
 
 export default (state = initialState, action) => {

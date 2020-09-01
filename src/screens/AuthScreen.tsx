@@ -6,6 +6,7 @@ import {
   Platform,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import * as authActions from "../store/actions/auth";
 import { lightTheme, darkTheme } from "../constants/theme";
 import Input from "../components/auth/input";
@@ -54,6 +55,7 @@ const AuthScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isSignup, setIsSignup] = useState(false);
+  const { navigate } = useNavigation();
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -97,9 +99,9 @@ const AuthScreen = (props) => {
     setIsLoading(true);
     try {
       await dispatch(action);
+      setIsLoading(false);
     } catch (err) {
       setError(err.message);
-      setIsLoading(false);
     }
   };
 
@@ -107,7 +109,7 @@ const AuthScreen = (props) => {
     <ThemeProvider theme={theme.mode === false ? lightTheme : darkTheme}>
       <AuthContainer>
         <AuthTitle>
-          {isSignup ? "Sign up to Find." : "Log In to Find."}
+          {isSignup ? "Sign up to SOTI." : "Log In to SOTI."}
         </AuthTitle>
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50}>
           <AuthTextBox>
@@ -159,7 +161,7 @@ const AuthScreen = (props) => {
             </ScrollView>
           </AuthTextBox>
         </KeyboardAvoidingView>
-        <GoogleAuth loading={setIsLoading} />
+        <GoogleAuth {...props} />
       </AuthContainer>
     </ThemeProvider>
   );

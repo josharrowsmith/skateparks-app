@@ -1,12 +1,5 @@
 import React, { useState } from "react";
 import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Linking,
-  ScrollView,
   ActivityIndicator,
 } from "react-native";
 import { device } from "../../constants";

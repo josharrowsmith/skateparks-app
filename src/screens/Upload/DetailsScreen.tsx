@@ -45,7 +45,7 @@ const DetailsScreen = ({ props, route }) => {
                   value={desc}
                   placeholder="Description"
                   multiline
-                  numberOfLines={2}
+                  numberOfLines={1}
                 />
               </ScrollView>
               <View style={{ alignItems: "flex-start", paddingVertical: 20 }}>

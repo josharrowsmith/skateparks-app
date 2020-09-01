@@ -1,14 +1,18 @@
 {
   "name": "skatepark",
-  "displayName": "skatepark-app",
+  "displayName": "skatepark-beta",
   "expo": {
-    "name": "skatepark",
-    "slug": "expo-template-bare",
+    "name": "skatepark-beta",
+    "slug": "skatepark-beta",
     "privacy": "unlisted",
-    "icon": "./src/assets/icons/icon.png",
-    "sdkVersion": "36.0.0",
     "version": "1.0.0",
+    "icon": "./src/assets/icons/SOTI-icon.png",
     "entryPoint": "node_modules/expo/AppEntry.js",
+    "splash": {
+      "backgroundColor": "#fff",
+      "image": "src/assets/icons/splash.png",
+      "resizeMode": "cover"
+    },
     "platforms": [
       "ios",
       "android",
@@ -18,13 +22,16 @@
       "translucent": true
     },
     "android": {
-      "package": "com.skatepark.test",
+      "package": "",
+      "googleServicesFile": "",
       "config": {
+        "googleSignIn": {
+          "certificateHash": ""
+        },
         "googleMaps": {
           "apiKey": ""
         }
       }
     }
-    
   }
 }

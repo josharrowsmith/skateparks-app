@@ -19,6 +19,7 @@ const MarkerIcon = styled.View`
 interface Iprops {
   parks: any;
   x: Animated.Value<number>;
+  auth: any;
 }
 
 export default class Markers extends React.Component<Iprops> {
@@ -90,8 +91,8 @@ export default class Markers extends React.Component<Iprops> {
               key={marker.id}
               anchor={{ x: 0.5, y: 0.5 }}
               coordinate={{
-                latitude: marker.coordinates._lat,
-                longitude: marker.coordinates._long,
+                latitude: Number(marker.coordinates.U),
+                longitude: Number(marker.coordinates.k),
               }}
             >
               <Animated.View style={[scaleStyle, opacityStyle]}>

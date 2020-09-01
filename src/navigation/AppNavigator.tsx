@@ -19,13 +19,13 @@ const AppNavigator = (props) => {
         return;
       }
       const transformedData = JSON.parse(userData);
-      const { token, userId, expiryDate, email } = transformedData;
+      const { token, userId, expiryDate, email, admin } = transformedData;
       const expirationDate = new Date(expiryDate);
       if (expirationDate <= new Date() || !token || !userId) {
         return;
       }
       const expirationTime = expirationDate.getTime() - new Date().getTime();
-      dispatch(authActions.authenticate(userId, token, null, expirationTime, email));
+      dispatch(authActions.authenticate(userId, token, null, expirationTime, email, admin));
     };
     tryLogin();
   }, [isAuth]);

@@ -2,13 +2,15 @@
 
 Find a skatepark near you !
 
-![Alt Text](./screenshots/startup.png)
-![Alt Text](./screenshots/login.png)
-![Alt Text](./screenshots/cards.png)
-![Alt Text](./screenshots/park.png)
-![Alt Text](./screenshots/radius.png)
-![Alt Text](./screenshots/setting2.png)
-![Alt Text](./screenshots/darkmode2.png)
+![Alt Text](./screenshots/Welcome.png)
+![Alt Text](./screenshots/Auth.png)
+![Alt Text](./screenshots/Home.png)
+![Alt Text](./screenshots/Radius.png)
+![Alt Text](./screenshots/search.png)
+![Alt Text](./screenshots/ParkScreen.png)
+![Alt Text](./screenshots/Change.png)
+![Alt Text](./screenshots/Settings.png)
+![Alt Text](./screenshots/darkmode.png)
 
 # Todo
 

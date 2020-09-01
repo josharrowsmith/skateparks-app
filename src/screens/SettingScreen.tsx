@@ -15,11 +15,7 @@ import {
   Description,
 } from "../constants/globalStyles";
 import styled, { ThemeProvider } from "styled-components";
-import {
-  Msg,
-  EnabledNotifcation,
-  DiableNotifcation,
-} from "../store/actions/notification";
+import { Msg } from "../store/actions/notification";
 import BackBtn from "../components/settings/BackBtn";
 import Grid from "../components/settings/Grid";
 import SettingContainer from "../components/settings/SettingContainer";
@@ -34,7 +30,7 @@ import firebase from "../config/firebase";
 const db = firebase.firestore();
 
 const BACKGROUND_LOCATION_TASK_NAME = "bg-location-name";
-const text = "Settings"
+const text = "Settings";
 
 const SettingScreen = () => {
   const theme = useSelector((state) => state.theme);
@@ -58,12 +54,7 @@ const SettingScreen = () => {
   }
 
   function changeNofication(state) {
-    setNofication(state);
-    if (state) {
-      enabled();
-    } else {
-      disable();
-    }
+    alert("This doesn't work on your device");
   }
 
   function changeThing(state) {
@@ -75,8 +66,8 @@ const SettingScreen = () => {
     await Location.startLocationUpdatesAsync(BACKGROUND_LOCATION_TASK_NAME, {
       accuracy: Location.Accuracy.Highest,
       distanceInterval: 0,
-      timeInterval: 600000,
-      showsBackgroundLocationIndicator: true
+      timeInterval: 60000,
+      showsBackgroundLocationIndicator: true,
     });
   }
 
@@ -90,7 +81,7 @@ const SettingScreen = () => {
       <Bg>
         <BackBtn {...{ navigation }} text={"Settings"} />
         <SettingContainer>
-          <Title />
+          <Title auth={auth} />
           <Grid>
             <Accordion
               {...{ theme }}
@@ -149,19 +140,6 @@ if (!TaskManager.isTaskDefined(BACKGROUND_LOCATION_TASK_NAME)) {
       }
       if (data) {
         const { locations } = data;
-        console.log("yes")
-        // const theme = await AsyncStorage.getItem("userData");
-        // const transformedData = JSON.parse(theme);
-        // const { userId } = transformedData;
-        // const storageRadius = await AsyncStorage.getItem("radius");
-        // const transformedData2 = JSON.parse(storageRadius);
-        // // const radius = 5;
-        // // Msg(radius, locations, userId);
-        // db.collection("users")
-        //   .doc(userId)
-        //   .update({
-        //     location: locations,
-        //   });
       }
     }
   );

@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, StyleSheet, Slider, TouchableOpacity } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { device } from "../constants";
 import { useNavigation } from "@react-navigation/native";
 import { setRadius } from "../store/actions/radius";
-import { getParks } from "../store/actions/parks";
+import { getParks, toggleCenter } from "../store/actions/parks";
 import Svg, { Circle } from "react-native-svg";
 // fix it later
 // import Slider from "../components/slider/Slider";
@@ -23,7 +23,14 @@ const RadiusScreen = (props) => {
   const location = useSelector((state) => state.location.location);
   const dispatch = useDispatch();
   const { goBack } = useNavigation();
-  console.log(location);
+
+  useEffect(() => {
+    async function toggle() {
+      dispatch(toggleCenter(location));
+    }
+
+    // toggle();
+  }, []);
 
   return (
     <TouchableOpacity

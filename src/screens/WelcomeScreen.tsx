@@ -65,7 +65,7 @@ const WelcomeScreen = (props) => {
   return (
     <ThemeProvider theme={theme.mode === false ? lightTheme : darkTheme}>
       <Bg>
-        <Title>Find</Title>
+        <Title>SOTI</Title>
         <LottieManager
           json={LottieAnimation}
           height={280}

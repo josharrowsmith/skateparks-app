@@ -28,13 +28,13 @@ export const signup = (email, password) => {
                     auth.user.uid,
                     token,
                     null,
-                    parseInt(1 * 1000 * 3600 * 24),
+                    parseInt(3600 * 1000),
                     auth.user.email,
                     claims.admin
                 )
             );
             const expirationDate = new Date(
-                new Date().getTime() + parseInt(1 * 1000 * 3600 * 24),
+                new Date().getTime() + parseInt(3600 * 1000),
             );
             saveDataToStorage(token, auth.user.uid, null, expirationDate, auth.user.email, claims.admin);
         } catch (err) {
@@ -54,17 +54,17 @@ export const login = (email, password) => {
                     auth.user.uid,
                     token,
                     null,
-                    parseInt(1 * 1000 * 3600 * 24),
+                    parseInt(7 * 1000 * 3600 * 24),
                     auth.user.email,
                     claims.admin
                 )
             );
             const expirationDate = new Date(
-                new Date().getTime() + parseInt(1 * 1000 * 3600 * 24),
+                new Date().getTime() + parseInt(7 * 1000 * 3600 * 24),
             );
             saveDataToStorage(token, auth.user.uid, null, expirationDate, auth.user.email, claims.admin);
         } catch (err) {
-            alert(err);
+            alert(err)
         }
 
     }
@@ -111,13 +111,13 @@ export const onSignIn = (idToken, accessToken) => {
                     auth.uid,
                     token,
                     null,
-                    parseInt(1 * 1000 * 3600 * 24),
+                    parseInt(7 * 1000 * 3600 * 24),
                     auth.email,
                     claims.admin
                 )
             );
             const expirationDate = new Date(
-                new Date().getTime() + parseInt(1 * 1000 * 3600 * 24),
+                new Date().getTime() + parseInt(7 * 1000 * 3600 * 24),
             );
             saveDataToStorage(token, auth.uid, null, expirationDate, auth.email, claims.admin);
         } catch (err) {

@@ -8,6 +8,7 @@ import { GoogleBtn, GoogleText } from "./BtnContainer";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { onSignIn } from "../../store/actions/auth";
+import Loading from "../home/dots";
 
 const { OAuthRedirect, URLSchemes } = AppAuth;
 
@@ -27,7 +28,8 @@ const clientIdForUseInTheExpoClient =
  * is read from the google-services.json.
  */
 const yourClientIdForUseInStandalone = Platform.select({
-  android: "",
+  android:
+    "",
   ios: "",
 });
 const webClientId =
@@ -37,6 +39,12 @@ const clientId = isInClient
   : yourClientIdForUseInStandalone;
 
 class GoogleAuth extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+    };
+  }
   async componentDidMount() {
     try {
       await GoogleSignIn.initAsync({
@@ -54,11 +62,16 @@ class GoogleAuth extends React.Component {
       URLSchemes,
     };
 
+    const { isLoading } = this.state;
+  
+
     return (
-      <GoogleBtn onPress={this._toggleAuth}>
-        <GoogleIcon />
-        <GoogleText>Sign in with Google</GoogleText>
-      </GoogleBtn>
+      <>
+        <GoogleBtn onPress={this._toggleAuth}>
+          <GoogleIcon />
+          <GoogleText>Sign in with Google</GoogleText>
+        </GoogleBtn>
+      </>
     );
   }
 
@@ -67,12 +80,14 @@ class GoogleAuth extends React.Component {
   };
 
   _signInAsync = async () => {
+    const { navigation } = this.props;
     try {
       await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
       userAuth = await user.refreshAuth();
       if (type === "success") {
-        this.props.onSignIn(user.auth.idToken, user.auth.accessToken);
+        await this.props.onSignIn(user.auth.idToken, user.auth.accessToken);
+        navigation.navigate("Home");
       }
     } catch ({ message }) {
       alert(JSON.stringify(message));

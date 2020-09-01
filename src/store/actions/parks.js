@@ -1,6 +1,5 @@
 import { GeoFirestore } from "geofirestore";
 import firebase from "../../config/firebase";
-import { reverseGeocodeAsync } from "expo-location";
 import { ADD_PLACE, STORE_lOCATION, STORE_URLS, GET_PLACES, STORE_DETAILS, REMOVE_STORE } from "./actionTypes"
 const db = firebase.firestore();
 const functions = firebase.functions();
@@ -50,7 +49,6 @@ export const getParks = (radius, lat, long) => {
 
 // I will fix this later
 const checkVoted = async (user, parkID) => {
-  console.log(parkID)
   const query = firebase
     .firestore()
     .collection("skateparks")
@@ -199,4 +197,3 @@ export const goToPark = (id) => {
     }
   }
 }
-

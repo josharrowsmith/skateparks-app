@@ -155,7 +155,7 @@ export default ({ route, navigation }) => {
               <Btn
                 onPress={() =>
                   Linking.openURL(
-                    `google.navigation:q=${park.coordinates._lat}+${park.coordinates._long}`
+                    `google.navigation:q=${park.coordinates.U}+${park.coordinates.k}`
                   )
                 }
               >

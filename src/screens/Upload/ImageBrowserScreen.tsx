@@ -1,20 +1,17 @@
-import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   View,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
 import { Bg } from "../../constants/globalStyles";
-import styled, { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components";
 import { useNavigation } from "@react-navigation/native";
 import { ImageBrowser } from "expo-image-picker-multiple";
 import * as ImageManipulator from "expo-image-manipulator";
 import { lightTheme, darkTheme } from "../../constants/theme";
-import BackBtn from "../../components/settings/BackBtn";
+import * as ScreenOrientation from 'expo-screen-orientation';
 let onSubmit;
 
 const ImageBrowserScreen = (props) => {

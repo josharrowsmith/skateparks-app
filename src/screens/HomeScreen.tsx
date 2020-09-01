@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Platform, AsyncStorage } from "react-native";
+import { Platform, AsyncStorage, View } from "react-native";
 import {
   requestPermissionsAsync,
   watchPositionAsync,
@@ -23,6 +23,7 @@ import SearchIcon from "../assets/icons/Search";
 import ToggleIcon from "../assets/icons/Toggle";
 import firebase from "../config/firebase";
 import * as authActions from "../store/actions/auth";
+import Loading from "../components/home/loading";
 
 interface IState {
   location: object;
@@ -48,7 +49,6 @@ const Main = ({ navigation }: IState) => {
   const theme = useSelector((state) => state.theme);
   const radius = useSelector((state) => state.radius.radius);
   const parks = useSelector((state) => state.places.places);
-  const localauth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const toggleTrueFalse = (val) => setToggled(val);
@@ -90,9 +90,9 @@ const Main = ({ navigation }: IState) => {
         return;
       }
       const expirationTime = expirationDate.getTime() - new Date().getTime();
-      firebase.auth().onAuthStateChanged(function(user) {
+      firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-          user.getIdToken().then(function(data) {
+          user.getIdToken().then(function (data) {
             dispatch(
               authActions.authenticate(
                 userId,
@@ -137,20 +137,19 @@ const Main = ({ navigation }: IState) => {
     }
   }
 
-  if (!currentRegion) {
-    return null;
-  }
-
   return (
     <ThemeProvider theme={theme.mode === false ? lightTheme : darkTheme}>
-      <Markers
-        isToggled={isToggled}
-        currentRegion={currentRegion}
-        radius={radius}
-        parks={parks}
-        theme={theme}
-        navigation={navigation}
-      />
+      {!currentRegion && <Loading />}
+      {currentRegion && (
+        <Markers
+          isToggled={isToggled}
+          currentRegion={currentRegion}
+          radius={radius}
+          parks={parks}
+          theme={theme}
+          navigation={navigation}
+        />
+      )}
       <Nav
         navigation={navigation}
         toggle={toggleTrueFalse}

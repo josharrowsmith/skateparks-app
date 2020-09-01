@@ -47,7 +47,7 @@ const MainImageScreen = (props) => {
     return (
       <View key={i} style={{ padding: 5 }}>
         <Image
-          style={{ height: 100, width: 100 }}
+          style={{ height: 130, width: 130 }}
           source={{ uri: item.uri }}
           key={i}
         />

@@ -50,11 +50,11 @@ class Markers extends React.PureComponent<IState> {
     this.regionTimeout = setTimeout(() => {
       if (this.index !== index) {
         this.index = index;
-        const { _lat, _long } = parks[index].coordinates;
+        const { U, k } = parks[index].coordinates;
         this.map.animateToRegion(
           {
-            latitude: _lat,
-            longitude: _long,
+            latitude: U,
+            longitude: k,
             latitudeDelta: 0.1,
             longitudeDelta: 0.1,
           },

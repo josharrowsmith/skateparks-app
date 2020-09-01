@@ -20,9 +20,11 @@ const AddScreen = (props) => {
   const makeAdmin = functions.httpsCallable("makeAdmin");
 
   const addToAdmin = (adminEmail) => {
-    makeAdmin({ email: adminEmail }).then((result) => {
-      console.log(result);
-    });
+    makeAdmin({ email: adminEmail })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
