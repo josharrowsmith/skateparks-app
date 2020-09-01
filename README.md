@@ -4,7 +4,7 @@ Find a skatepark near you !
 
 ![Alt Text](./screenshots/Welcome.png)
 ![Alt Text](./screenshots/Auth.png)
-![Alt Text](./screenshots/Home.png)
+![Alt Text](./screenshots/HomeScreen.png)
 ![Alt Text](./screenshots/Radius.png)
 ![Alt Text](./screenshots/search.png)
 ![Alt Text](./screenshots/ParkScreen.png)
