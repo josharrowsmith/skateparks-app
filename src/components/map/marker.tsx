@@ -91,8 +91,8 @@ export default class Markers extends React.Component<Iprops> {
               key={marker.id}
               anchor={{ x: 0.5, y: 0.5 }}
               coordinate={{
-                latitude: Number(marker.coordinates.U),
-                longitude: Number(marker.coordinates.k),
+                latitude: Number(marker.coordinates.latitude),
+                longitude: Number(marker.coordinates.longitude),
               }}
             >
               <Animated.View style={[scaleStyle, opacityStyle]}>

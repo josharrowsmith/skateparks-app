@@ -16,7 +16,6 @@ const locationMaker = ({ currentRegion }) => {
   return (
     <>
       <MapView.Marker
-        title="Current location"
         onPress={async () => {
           let location = await getCurrentPositionAsync({});
           setMarker(true);
@@ -49,7 +48,7 @@ const locationMaker = ({ currentRegion }) => {
       </MapView.Marker>
       {!showMarker && (
         <MapView.Marker
-          title="Moved location"
+
           tracksViewChanges={true}
           coordinate={{
             latitude: currentRegion.latitude,

@@ -63,7 +63,6 @@ class GoogleAuth extends React.Component {
     };
 
     const { isLoading } = this.state;
-  
 
     return (
       <>
@@ -82,7 +81,6 @@ class GoogleAuth extends React.Component {
   _signInAsync = async () => {
     const { navigation } = this.props;
     try {
-      await GoogleSignIn.askForPlayServicesAsync();
       const { type, user } = await GoogleSignIn.signInAsync();
       userAuth = await user.refreshAuth();
       if (type === "success") {

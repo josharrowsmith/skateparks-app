@@ -1,5 +1,6 @@
 import { GeoFirestore } from "geofirestore";
 import firebase from "../../config/firebase";
+import { reverseGeocodeAsync } from "expo-location";
 import { ADD_PLACE, STORE_lOCATION, STORE_URLS, GET_PLACES, STORE_DETAILS, REMOVE_STORE } from "./actionTypes"
 const db = firebase.firestore();
 const functions = firebase.functions();
@@ -196,4 +197,8 @@ export const goToPark = (id) => {
       return doc.data();
     }
   }
+}
+
+export const toggleCenter = () => {
+
 }

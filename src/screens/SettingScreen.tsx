@@ -86,7 +86,7 @@ const SettingScreen = () => {
             <Accordion
               {...{ theme }}
               text={
-                "Turn on push notifications within a 5km raduis to your current location"
+                "Turn on push notifications within a 5km radius to your current location"
               }
             >
               <SettingRow>

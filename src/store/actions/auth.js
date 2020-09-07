@@ -108,18 +108,18 @@ export const onSignIn = (idToken, accessToken) => {
             const { claims, token } = await firebase.auth().currentUser.getIdTokenResult();
             dispatch(
                 authenticate(
-                    auth.uid,
+                    auth.user.uid,
                     token,
                     null,
                     parseInt(7 * 1000 * 3600 * 24),
-                    auth.email,
+                    auth.user.email,
                     claims.admin
                 )
             );
             const expirationDate = new Date(
                 new Date().getTime() + parseInt(7 * 1000 * 3600 * 24),
             );
-            saveDataToStorage(token, auth.uid, null, expirationDate, auth.email, claims.admin);
+            saveDataToStorage(token, auth.user.uid, null, expirationDate, auth.user.email, claims.admin);
         } catch (err) {
             alert(err);
         }
@@ -182,7 +182,6 @@ export const refreshToken = () => {
 const setLogoutTimer = expirationTime => {
     return dispatch => {
         timer = setTimeout(() => {
-            alert(JSON.stringify(expirationTime))
             dispatch(logout());
         }, expirationTime);
     };

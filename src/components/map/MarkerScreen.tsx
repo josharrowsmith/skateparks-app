@@ -142,7 +142,6 @@ export default ({ route, navigation }) => {
             <TitleContainer>
               <Stars
                 half={true}
-                disabled={!localauth.admin}
                 default={park.rating}
                 spacing={5}
                 starSize={30}
@@ -155,7 +154,7 @@ export default ({ route, navigation }) => {
               <Btn
                 onPress={() =>
                   Linking.openURL(
-                    `google.navigation:q=${park.coordinates.U}+${park.coordinates.k}`
+                    `google.navigation:q=${park.coordinates.latitude}+${park.coordinates.longitude}`
                   )
                 }
               >

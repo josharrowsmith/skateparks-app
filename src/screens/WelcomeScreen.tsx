@@ -1,20 +1,21 @@
 import React, { useEffect } from "react";
 import {
   View,
-  Text,
   AsyncStorage,
-  TouchableOpacity,
-  Button,
+  Dimensions,
 } from "react-native";
 import { lightTheme, darkTheme } from "../constants/theme";
-import { Bg } from "../constants/globalStyles";
+import { Bg } from "../constants/globalStyles"; 
 import styled, { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { changeMode } from "../store/actions/theme";
+import { device } from "../constants";
 import LottieManager from "../components/home/lottieManger";
 import LottieAnimation from "../assets/data/bike.json";
-import * as authActions from "../store/actions/auth";
 import { setRadius } from "../store/actions/radius";
+import LottieView from "lottie-react-native";
+
+const { height, width } = Dimensions.get("window");
 
 const Title = styled.Text`
   font-size: 40px;
@@ -62,17 +63,26 @@ const WelcomeScreen = (props) => {
     getStorage();
   }, [dispatch]);
 
+  console.log(device.width);
+
   return (
     <ThemeProvider theme={theme.mode === false ? lightTheme : darkTheme}>
-      <Bg>
+      <View
+        style={{
+          zIndex: 99,
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Title>SOTI</Title>
         <LottieManager
           json={LottieAnimation}
           height={280}
           width={30}
           style={{
-            marginTop: -50,
-            zIndex: -450000,
+            marginTop: -60,
+            zIndex: 99,
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -80,9 +90,19 @@ const WelcomeScreen = (props) => {
         <WelcomeBtn onPress={() => props.navigation.navigate("Auth")}>
           <BtnText>Get Started</BtnText>
         </WelcomeBtn>
-      </Bg>
+      </View>
+      <LottieView
+        loop={true}
+        width={device.width + 80}
+        style={{ marginTop: 45 }}
+        height={500}
+        resizeMode={"cover"}
+        autoPlay
+        source={require("../assets/data/blob.json")}
+      />
     </ThemeProvider>
   );
 };
+1;
 
 export default WelcomeScreen;
