@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
+  Platform
 } from "react-native";
 import { connectSearchBox } from "react-instantsearch-native";
 import Animated, {
@@ -142,7 +143,7 @@ const SearchBox = ({ currentRefinement, refine, theme }) => {
                         : ["#000", "#ffff"],
                   }),
                 }}
-                name="md-search"
+                name={Platform.OS === 'android' ? "md-search" : "ios-search"}
               />
             </Touchablle>
             {showInput && (
@@ -187,7 +188,7 @@ const SearchBox = ({ currentRefinement, refine, theme }) => {
                         : ["#000", "#ffff"],
                   }),
                 }}
-                name="md-close"
+                name={Platform.OS === 'android' ? "md-close" : "ios-close"}
               />
             </Touchablle>
           </Animated.View>
@@ -198,7 +199,7 @@ const SearchBox = ({ currentRefinement, refine, theme }) => {
             borderRadius: 15,
             position: "absolute",
             width: width - 20,
-            height: height - keyboardHeight - 55 - 50,
+            height: Platform.OS === 'android' ? height - keyboardHeight - 55 - 50 : height - keyboardHeight - 55 - 50 - 20,
             opacity: animatedValue,
             transform: [{ scale: animatedValue }],
             backgroundColor: theme.mode == false ? "#fff" : "#363537",

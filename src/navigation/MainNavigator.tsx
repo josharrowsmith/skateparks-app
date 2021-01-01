@@ -1,4 +1,5 @@
 import React from "react";
+import { Platform } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
@@ -72,13 +73,13 @@ export const UploadNavigator = () => {
         tabBarIcon: ({ color, size }) => {
           let iconName;
           if (route.name == "Image") {
-            iconName = "md-images";
+            iconName = Platform.OS === 'android' ? "md-images" : "ios-images";
           } else if (route.name == "Details") {
-            iconName = "md-information-circle";
+            iconName = Platform.OS === 'android' ? "md-information-circle" : "ios-information-circle";
           } else if (route.name == "Map") {
-            iconName = "md-pin";
+            iconName = Platform.OS === 'android' ? "md-pin" : "ios-pin";
           } else if (route.name == "Upload") {
-            iconName = "md-cloud-upload";
+            iconName = Platform.OS === 'android' ? "md-cloud-upload" : "ios-cloud-upload";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },

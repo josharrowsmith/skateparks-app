@@ -43,7 +43,7 @@ const DistanceContainer = styled.View`
 const Distance = styled.Text`
   color: ${(props) => props.theme.text};
   background-color: ${(props) => props.theme.body};
-  border-radius: 30px;
+  border-radius: 1000px;
   text-align: center;
   width: 80px;
   height: 25px;

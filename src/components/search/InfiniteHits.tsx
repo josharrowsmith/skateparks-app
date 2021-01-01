@@ -71,9 +71,9 @@ const renderRow = ({ item: hit, navigate, dispatch, theme }) => {
         </ParkName>
 
         <View style={{ alignSelf: "flex-start" }}>
-          <Rating disabled={true} rating={hit.d.rating}  fullStar={<FullStar name={'md-star'}/>}
-                emptyStar={<FullStar name={'md-star-outline'}/>}
-                halfStar={<FullStar name={'md-star-half'}/>} />
+          <Rating disabled={true} rating={hit.d.rating} fullStar={require("../../assets/starFilled.png")}
+            emptyStar={require("../../assets/starEmpty.png")}
+            halfStar={require("../../assets/starHalf.png")} />
         </View>
       </Item>
     </View>
@@ -95,6 +95,7 @@ const InfiniteHits = ({ hits, hasMore, refine, theme }) => {
           marginLeft: 10,
           marginRight: 10,
           marginBottom: 20,
+          overflow: "hidden"
         }}
         data={hits}
         keyExtractor={(item, index) => index.toString()}

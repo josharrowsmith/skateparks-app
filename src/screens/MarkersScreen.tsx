@@ -140,7 +140,6 @@ class Markers extends React.PureComponent<IState> {
       auth,
     } = this.props;
 
-    console.log(parks)
 
     return (
       <>

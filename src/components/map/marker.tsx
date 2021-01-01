@@ -12,8 +12,10 @@ const { interpolate, Extrapolate, Value } = Animated;
 const MarkerIcon = styled.View`
   width: 30px;
   height: 30px;
-  border-radius: 30px;
+  border-radius: 30px / 2;
   background-color: ${(props) => props.theme.text};
+  transform-origin: 50% 50%;
+  overflow: visible;
 `;
 
 interface Iprops {
@@ -95,7 +97,7 @@ export default class Markers extends React.Component<Iprops> {
                 longitude: Number(marker.coordinates.longitude),
               }}
             >
-              <Animated.View style={[scaleStyle, opacityStyle]}>
+              <Animated.View style={[scaleStyle, opacityStyle, { width: 50, height: 50 }]}>
                 <MarkerIcon />
               </Animated.View>
               {this.renderCallout(marker)}

@@ -10,6 +10,7 @@ import {
   Linking,
   ActivityIndicator,
   Button,
+  Platform
 } from "react-native";
 import { lightTheme, darkTheme } from "../../constants/theme";
 import { Bg, Btn, SmallFontInv } from "../../constants/globalStyles";
@@ -69,6 +70,8 @@ const Back = styled.TouchableOpacity`
 const BackBtn = styled.Text`
   color: ${(props) => props.theme.exit};
   font-size: 38px;
+  display: flex;
+  align-items: center;
 `;
 
 const FullStar = styled(Ionicons)`
@@ -147,9 +150,9 @@ export default ({ route, navigation }) => {
                 starSize={30}
                 count={5}
                 update={(val) => ratePark(val)}
-                fullStar={<FullStar name={"md-star"} />}
-                emptyStar={<FullStar name={"md-star-outline"} />}
-                halfStar={<FullStar name={"md-star-half"} />}
+                fullStar={require("../../assets/starFilled.png")}
+                emptyStar={require("../../assets/starEmpty.png")}
+                halfStar={require("../../assets/starHalf.png")}
               />
               <Btn
                 onPress={() =>
@@ -169,7 +172,7 @@ export default ({ route, navigation }) => {
             </ParkDescription>
           </ScrollView>
           {localauth.admin && (
-            <View style={{display:"flex", flexDirection: "row"}}>
+            <View style={{ display: "flex", flexDirection: "row" }}>
               <Btn style={{ marginBottom: 10 }} onPress={updatePark}>
                 <SmallFontInv font={18}>update</SmallFontInv>
               </Btn>

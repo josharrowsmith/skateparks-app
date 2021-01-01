@@ -1,5 +1,5 @@
 import React, { Children } from "react";
-import { StyleSheet, View, Animated, Dimensions, TabBarIOS } from "react-native";
+import { StyleSheet, View, Animated, Dimensions, Text, Platform } from "react-native";
 import * as shape from "d3-shape";
 import Svg, { Path } from "react-native-svg";
 import Icons from "./icons";
@@ -48,33 +48,33 @@ const getPath = (): string => {
     .line()
     .x((d) => d.x)
     .y((d) => d.y)([
-    { x: 0, y: 0 },
-    { x: width, y: 0 },
-  ]);
+      { x: 0, y: 0 },
+      { x: width, y: 0 },
+    ]);
   const tab = shape
     .line()
     .x((d) => d.x)
     .y((d) => d.y)
     .curve(shape.curveBasis)([
-    { x: width, y: 0 },
-    { x: width + 5, y: 0 },
-    { x: width + 10, y: 10 },
-    { x: width + 15, y: height },
-    { x: width + tabWidth - 15, y: height },
-    { x: width + tabWidth - 10, y: 10 },
-    { x: width + tabWidth - 5, y: 0 },
-    { x: width + tabWidth, y: 0 },
-  ]);
+      { x: width, y: 0 },
+      { x: width + 5, y: 0 },
+      { x: width + 10, y: 10 },
+      { x: width + 15, y: height },
+      { x: width + tabWidth - 15, y: height },
+      { x: width + tabWidth - 10, y: 10 },
+      { x: width + tabWidth - 5, y: 0 },
+      { x: width + tabWidth, y: 0 },
+    ]);
   const right = shape
     .line()
     .x((d) => d.x)
     .y((d) => d.y)([
-    { x: width + tabWidth, y: 0 },
-    { x: width * 2.5, y: 0 },
-    { x: width * 2.5, y: height },
-    { x: 0, y: height },
-    { x: 0, y: 0 },
-  ]);
+      { x: width + tabWidth, y: 0 },
+      { x: width * 2.5, y: 0 },
+      { x: width * 2.5, y: height },
+      { x: 0, y: height },
+      { x: 0, y: 0 },
+    ]);
   return `${left} ${tab} ${right}`;
 };
 const d = getPath();
@@ -103,6 +103,9 @@ class Nav extends React.PureComponent<NavProps> {
           >
             <Path fill={theme.mode ? "#363537" : "#fff"} {...{ d }} />
           </AnimatedSvg>
+          {Platform.OS == "ios" && (
+            <View style={{ height: 14, backgroundColor: theme.mode ? "#363537" : "#fff" }}></View>
+          )}
           <View style={StyleSheet.absoluteFill}>
             <Icons {...{ tabs, value, navigation, toggle, theme }} />
           </View>

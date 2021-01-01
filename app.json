@@ -1,16 +1,16 @@
 {
-  "name": "skatepark",
-  "displayName": "skatepark-beta",
+  "name": "SOTI",
+  "displayName": "SOTI",
   "expo": {
-    "name": "skatepark-beta",
-    "slug": "skatepark-beta",
+    "name": "skatepark-beta-ios",
+    "slug": "skatepark-beta-ios",
     "privacy": "unlisted",
     "version": "1.0.0",
-    "icon": "./src/assets/icons/SOTI-icon.png",
+    "icon": "./src/assets/icons/SOTI-icon-white.png",
     "entryPoint": "node_modules/expo/AppEntry.js",
     "splash": {
       "backgroundColor": "#fff",
-      "image": "src/assets/icons/splash.png",
+      "image": "src/assets/icons/splashScreen.png",
       "resizeMode": "cover"
     },
     "platforms": [
@@ -32,6 +32,9 @@
           "apiKey": ""
         }
       }
+    },
+    "ios": {
+      "bundleIdentifier": ""
     }
   }
 }
